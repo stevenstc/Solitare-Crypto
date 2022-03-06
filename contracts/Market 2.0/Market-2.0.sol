@@ -1,5 +1,5 @@
 pragma solidity >=0.8.0;
-// SPDX-License-Identifier: Apache 2.0
+// SPDX-License-Identifier: Apache-2.0
 
 
 interface TRC20_Interface {
@@ -69,17 +69,14 @@ library SafeMath {
 
 }
 
-contract Context {
-  constructor () { }
+abstract contract Context {
+    function _msgSender() internal view virtual returns (address) {
+        return msg.sender;
+    }
 
-  function _msgSender() internal view virtual returns (address) {
-      return msg.sender;
-  }
-
-  function _msgData() internal view virtual returns (bytes calldata) {
-      this; 
-      return msg.data;
-  }
+    function _msgData() internal view virtual returns (bytes calldata) {
+        return msg.data;
+    }
 }
 
 contract Ownable is Context {
@@ -134,7 +131,7 @@ contract Admin is Context, Ownable{
 
 }
 
-contract Market is Context, Admin{
+contract MarketV2 is Context, Admin{
   using SafeMath for uint256;
 
   address public tokenTRC721 = 0xF0fB4a5ACf1B1126A991ee189408b112028D7A63;
@@ -175,6 +172,7 @@ contract Market is Context, Admin{
     bool acumulable;
     bool ilimitado;
     uint256 cantidad;
+    bool stakear;
   }
   
   mapping (address => Investor) public investors;
@@ -188,123 +186,7 @@ contract Market is Context, Admin{
   uint256 ingresos;
   uint256 retiros;
 
-  constructor() {
-     
-    items.push(
-    Item(
-    {
-      nombre:"t1-brazil-legendario",
-      tipo: "legendario",
-      valor: 1250 * 10**18,
-      acumulable: false,
-      ilimitado: false,
-      cantidad: 1000
-    }));
-    items.push(
-    Item(
-    {
-      nombre:"t2-argentina-legendario",
-      tipo: "legendario",
-      valor: 1250 * 10**18,
-      acumulable: false,
-      ilimitado: false,
-      cantidad: 1000
-    }));
-    items.push(
-    Item(
-    {
-      nombre:"t3-alemania-legendario",
-      tipo: "legendario",
-      valor: 1250 * 10**18,
-      acumulable: false,
-      ilimitado: false,
-      cantidad: 1000
-    }));
-    items.push(
-    Item(
-    {
-      nombre:"t4-japon-epico",
-      tipo: "epico",
-      valor: 875 * 10**18,
-      acumulable: false,
-      ilimitado: false,
-      cantidad: 500
-    }));
-    items.push(
-    Item(
-    {
-      nombre:"t5-colombia-epico",
-      tipo: "epico",
-      valor: 875 * 10**18,
-      acumulable: false,
-      ilimitado: false,
-      cantidad: 500
-    }));
-    items.push(
-    Item(
-    {
-      nombre:"t6-mexico-epico",
-      tipo: "epico",
-      valor: 875 * 10**18,
-      acumulable: false,
-      ilimitado: false,
-      cantidad: 1500
-    }));
-    items.push(
-    Item(
-    {
-      nombre:"t7-croacia-epico",
-      tipo: "epico",
-      valor: 875 * 10**18,
-      acumulable: false,
-      ilimitado: false,
-      cantidad: 750
-    }));
-    items.push(
-    Item(
-    {
-      nombre:"t8-EU-epico",
-      tipo: "epico",
-      valor: 875 * 10**18,
-      acumulable: false,
-      ilimitado: false,
-      cantidad: 500
-    }));
-    items.push(
-    Item(
-    {
-      nombre:"t9-portugal-epico",
-      tipo: "epico",
-      valor: 875 * 10**18,
-      acumulable: false,
-      ilimitado: false,
-      cantidad: 750
-    }));
-    items.push(
-    Item(
-    {
-      nombre:"t10-esp-epico",
-      tipo: "epico",
-      valor: 875 * 10**18,
-      acumulable: false,
-      ilimitado: false,
-      cantidad: 500
-    }));
-
-    opciones.push( 
-    Tipos({
-      tipo :"legendario",
-      ilimitados: false,
-      cantidad: 1}
-    ));
-    opciones.push(
-    Tipos({
-      tipo :"epico",
-      ilimitados: false,
-      cantidad: 1}
-    ));
-
-  }
+  constructor() {}
 
   function viewDuplicatedItem(uint256 _id) private view returns(bool){
 
@@ -312,7 +194,6 @@ contract Market is Context, Admin{
     Item[] memory myInventario = inventario[_msgSender()];
     bool duplicado = false;
     
-
      for (uint256 i = 0; i < myInventario.length; i++) {
 
        if(keccak256(abi.encodePacked(myInventario[i].nombre)) == keccak256(abi.encodePacked(item.nombre))){
@@ -426,7 +307,8 @@ contract Market is Context, Admin{
           valor: _value,
           acumulable: _acumulable,
           ilimitado: _ilimitado,
-          cantidad: _cantidad
+          cantidad: _cantidad,
+          stakear: false
         }
       )
     );
@@ -444,7 +326,8 @@ contract Market is Context, Admin{
       valor: _value,
       acumulable: _acumulable,
       ilimitado: _ilimitado,
-      cantidad: _cantidad
+      cantidad: _cantidad,
+      stakear: false
     });
 
     return true;
@@ -455,9 +338,10 @@ contract Market is Context, Admin{
 
     opciones.push(
       Tipos({
-      tipo : _tipo,
-      ilimitados: _ilimitado,
-      cantidad: _cantidad})
+        tipo : _tipo,
+        ilimitados: _ilimitado,
+        cantidad: _cantidad
+      })
     );
     return true;
 
@@ -467,9 +351,10 @@ contract Market is Context, Admin{
 
     opciones[_id] = 
       Tipos({
-      tipo : _tipo,
-      ilimitados: _ilimitado,
-      cantidad: _cantidad});
+        tipo : _tipo,
+        ilimitados: _ilimitado,
+        cantidad: _cantidad
+      });
     return true;
 
   }
