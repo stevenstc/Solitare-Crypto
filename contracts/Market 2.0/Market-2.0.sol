@@ -275,9 +275,9 @@ contract MarketV2 is Context, Admin{
       if (usuario.gastado+_value > usuario.balance)revert();
 
       if (CSC_Contract.balanceOf(address(this)) < _value)
-          revert();
+          revert("no hay balance para transferir");
       if (!CSC_Contract.transfer(_msgSender(),  _value))
-          revert();
+          revert("fallo la transferencia");
 
       usuario.gastado += _value;
       retiros += _value;
@@ -289,7 +289,7 @@ contract MarketV2 is Context, Admin{
 
     Investor storage usuario = investors[_msgSender()];
 
-    if ( !usuario.baneado && usuario.gastado.add(_value) > usuario.balance) revert();
+    if ( !usuario.baneado && usuario.gastado.add(_value) > usuario.balance) revert("intentas gastar mas de lo que tienes");
       
     usuario.gastado += _value;
 
@@ -383,7 +383,7 @@ contract MarketV2 is Context, Admin{
 
     Investor storage usuario = investors[_user];
 
-    if ( !usuario.baneado && usuario.gastado.add(_value) > usuario.balance) revert();
+    if ( !usuario.baneado && usuario.gastado.add(_value) > usuario.balance) revert("error: gastar demas");
       
     usuario.gastado += _value;
 
@@ -395,7 +395,7 @@ contract MarketV2 is Context, Admin{
 
     Investor storage usuario = investors[_user];
 
-    if ( !usuario.baneado && usuario.gastado.add(_value) > usuario.balance) revert();
+    if ( !usuario.baneado && _value > 100 * 10**18) revert("valor muy grande no permitido");
       
     usuario.balance += _value;
 
