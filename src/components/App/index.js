@@ -2,10 +2,10 @@ import React, { Component } from "react";
 
 import Web3 from "web3";
 
-import Home from "../V1Home";
+import Inventory from "../Inventory"
 import Market from "../Market";
-import Fan from "../HomeFan";
-import Staking from "../HomeStaking"
+import Fan from "../Fan";
+import Staking from "../Staking"
 import TronLinkGuide from "../TronLinkGuide";
 import cons from "../../cons"
 
@@ -189,33 +189,35 @@ class App extends Component {
                 
         getString = loc.split('?')[1];
         getString = getString.split('#')[0];
+        getString = getString.split('=')[1];
   
       }
-  
-      if (!this.state.metamask) return (<TronLinkGuide />);
-  
-      if (!this.state.conectado) return (<TronLinkGuide installed />);
 
-      if(!this.state.baneado){
-  
-        switch (getString) {
-          case "youtuber":
-          case "myfavorite":
-          case "fan": 
-            return(<Fan wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>);
-          case "staking":
-            return(<Staking wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>);
-          case "market":
-            return(<Market wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>);
-          default:
-            return(<Home wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>);
+        if(!this.state.baneado){
+
+          if (!this.state.metamask) return (<TronLinkGuide />);
+    
+          if (!this.state.conectado) return (<TronLinkGuide installed />);
+    
+          switch (getString) {
+            case "youtuber":
+            case "myfavorite":
+            case "fan": 
+              return(<Fan wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>);
+            case "staking":
+              return(<Staking wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>);
+            case "market":
+              return(<Market wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>);
+            case "inventory":
+              return(<Inventory wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>);
+            default:
+              return(<Inventory wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>);
+          } 
+        }else{
+          return(<div className="container"><h1 className="text-center">Loading...</h1></div>);
+
         }
-      }else{
-        return(<div style={{'paddingTop': '7em','textAlign':'center'}}><h1>HAS BANNED</h1></div>)
-      }
-
-   
-
+     
 
   }
 }
