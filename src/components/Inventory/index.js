@@ -755,63 +755,50 @@ export default class Home extends Component {
                 </div>
 
                 <div className="col-lg-4 col-md-12 p-4 text-center monedas">
-                  <h2 className=" pb-4">100 WCSC</h2>
+                  <h2 className=" pb-4">100 SBNB</h2>
                   <img
                     className=" pb-4"
                     src="assets/img/01.png"
                     width="100%"
                     alt=""
                   />
-                  <div
-                    className="position-relative btn-monedas"
-                    onClick={() => this.buyCoins(100)}
-                  >
-                    <span className="position-absolute top-50 end-0 translate-middle-y p-5">
-                      BUY
-                    </span>
-                  </div>
+                  <button className="btn btn-success" onClick={() => this.buyCoins(100)}>
+                    BUY
+                  </button>
                 </div>
 
                 <div 
                   className="col-lg-4 col-md-12 p-4 monedas"
-                  onClick={() => this.buyCoins(500)}
-                
+               
                 >
                   
-                  <h2 className=" pb-4">500 WCSC</h2>
+                  <h2 className=" pb-4">500 SBNB</h2>
                   <img
                     className=" pb-4"
                     src="assets/img/02.png"
                     width="100%"
                     alt=""
                   />
-                  <div
-                    className="position-relative btn-monedas"
-                  >
-                    <span className="position-absolute top-50 end-0 translate-middle-y p-5">
-                      BUY
-                    </span>
-                  </div>
+                  <button className="btn btn-success" onClick={() => this.buyCoins(500)}>
+                    BUY
+                  </button>
                 </div>
 
                 <div 
                   className="col-lg-4 col-md-12 p-4 monedas"
-                  onClick={() => this.buyCoins(1000)}
+                  
                 >
-                  <h2 className=" pb-4">1000 WCSC</h2>
+                  <h2 className=" pb-4">1000 SBNB</h2>
                   <img
                     className=" pb-4"
                     src="assets/img/03.png"
                     width="100%"
                     alt=""
                   />
-                  <div
-                    className="position-relative btn-monedas"
-                  >
-                    <span className="position-absolute top-50 end-0 translate-middle-y p-5">
-                      BUY
-                    </span>
-                  </div>
+                  <button className="btn btn-success" onClick={() => this.buyCoins(1000)}>
+                    BUY
+                  </button>
+                  
                 </div>
               </div>
             </div>
@@ -1017,7 +1004,7 @@ this.update();
                 }}
               >
                 {" "}
-                Buy WCSC {" -> "}
+                Buy SBNB {" -> "}
               </button>
 
             </div>
@@ -1032,7 +1019,7 @@ this.update();
 
             <h3>EXCHANGE</h3>
               <span>
-                WCSC: {this.state.balanceMarket}
+                SBNB: {this.state.balanceMarket}
               </span>
               <br/><br/>
               <button
@@ -1064,11 +1051,11 @@ this.update();
 
                   }else{
                     if(parseInt(cantidad) < 500){
-                      alert("Please set amount greater than 500 WCSC")
+                      alert("Please set amount greater than 500 SBNB")
                     }
 
                     if(parseInt(cantidad) > 1000){
-                      alert("Set an amount less than 1000 WCSC")
+                      alert("Set an amount less than 1000 SBNB")
                     }
 
                     if(parseInt(this.state.balanceMarket) <= 0){
@@ -1081,7 +1068,7 @@ this.update();
                 }}
               >
                 {"<- "}
-                Sell WCSC
+                Sell SBNB
               </button>
               <br/><br/>
               <button
@@ -1137,7 +1124,7 @@ this.update();
                 }}
               >
                 {" "}
-                Send WCSC To Game {" ->"}
+                Send SBNB To Game {" ->"}
               </button>
             </div>
 
@@ -1151,7 +1138,7 @@ this.update();
 
             <h3>IN GAME</h3>
               <span>
-                WCSC: {this.state.balanceGAME}
+                SBNB: {this.state.balanceGAME}
               </span>
              
               <br/><br/>
@@ -1226,12 +1213,12 @@ this.update();
                   }else{
                     if(Date.now() >= timeWitdrwal){
                       if (this.state.balanceGAME-cantidad < 0) {
-                        alert("Insufficient funds WCSC")
+                        alert("Insufficient funds SBNB")
                       }else{
                         if(cantidad < 500 ){
-                          alert("Please enter a value greater than 500 WCSC")
+                          alert("Please enter a value greater than 500 SBNB")
                         }else{
-                          alert("Please enter a value less than 10000 WCSC")
+                          alert("Please enter a value less than 10000 SBNB")
                         }
                       }
                     }else{

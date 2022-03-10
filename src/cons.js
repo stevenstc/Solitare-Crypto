@@ -1,9 +1,5 @@
 import {APP_CSRK, APP_TOKNN, APP_API} from "@env";
 
-const proxy = "";
-
-const PRE = "";
-
 const WS = false;  //TESTNET
 
 const TokenTest = "0x038987095f309d3640F51644430dc6C7C4E2E409"; //token de pruebas
@@ -27,4 +23,4 @@ const WALLETPAY = "0x306A75c3E33603f69F4178C2c40EAF0734DE4F64";
 const FACTOR_GAS = 2;
 
 
-export default {WALLETPAY,FACTOR_GAS, proxy, WS, SCtest, SC2test, SC3test, TokenTest, SC, SC2, SC3, SC4, PRE, TOKEN, SCK, SCKDTT, API};
+export default {WALLETPAY,FACTOR_GAS, WS, SCtest, SC2test, SC3test, TokenTest, SC, SC2, SC3, SC4, TOKEN, SCK, SCKDTT, API};

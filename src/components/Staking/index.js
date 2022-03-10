@@ -40,7 +40,7 @@ export default class HomeStaking extends Component {
       .balanceOf(this.props.currentAccount)
       .call({ from: this.props.currentAccount });
 
-    var valor = document.getElementById("cantidadCSC").value;
+    var valor = document.getElementById("cantidadSBNB").value;
 
     var amount = (valor*10**18).toLocaleString();
 
@@ -145,9 +145,9 @@ export default class HomeStaking extends Component {
             <div className="container px-5">
               <div className="row justify-content-md-center">
                 <div className="col-md-auto text-center">
-                  <h2 className=" pb-4">STAKING YOUR CSC</h2>
-                  <input type="number" className="form-control" id="cantidadCSC" placeholder="Min. 200 CSC"/><br />
-                  <button className="btn btn-warning" onClick={()=> this.staking()}><b>Stake CSC</b></button>
+                  <h2 className=" pb-4">STAKING YOUR SBNB</h2>
+                  <input type="number" className="form-control" id="cantidadSBNB" placeholder="Min. 200 SBNB"/><br />
+                  <button className="btn btn-warning" onClick={()=> this.staking()}><b>Stake SBNB</b></button>
 
                 </div>
 
@@ -162,7 +162,7 @@ export default class HomeStaking extends Component {
                     <img src="assets/img/STAKE.png" width="270px"  alt=""/>
                     <div className="centradoStake">
                       <h3 className=" pb-4">
-                        {this.state.staked} CSC {" "} {this.state.claim}
+                        {this.state.staked} SBNB {" "} {this.state.claim}
                       </h3>
                     </div>
                 </div>
