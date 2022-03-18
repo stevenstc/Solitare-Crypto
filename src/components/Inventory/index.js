@@ -349,21 +349,10 @@ export default class Home extends Component {
         .investors(this.props.currentAccount)
         .call({ from: this.props.currentAccount });
 
-        //console.log(investor)
+        console.log(investor)
 
     var balance = investor.balance;
     var gastado = investor.gastado;
-    var email = investor.correo;
-
-    //console.log(email.length);
-
-
-    if (email === "" || email.length < 100) {
-      email = "Please update your email";
-    }else{
-      email = cryptr.decrypt(investor.correo)
-      
-    }
 
     balance = new BigNumber(balance);
     gastado = new BigNumber(gastado);
@@ -376,7 +365,6 @@ export default class Home extends Component {
 
     this.setState({
       balanceMarket: balance,
-      email: email
     });
   }
 
@@ -805,64 +793,23 @@ export default class Home extends Component {
           </div>
         </header>
 
+        <hr></hr>
+
         <div className="container mt-3 mb-3">
           <div className="row text-center">
-            <div className="col-lg-4 col-md-4 ">
-              <h2>Wallet conected</h2>
+            <div className="col-lg-6 col-md-6 ">
+              <h2>Wallet</h2>
               <p>{this.props.currentAccount}</p>
-              <p>
-              <button
-                className="btn btn-success"
-                onClick={() => {
-
-                  window.ethereum.request({
-                  method: 'wallet_watchAsset',
-                  params: {
-                    type: 'ERC20',
-                    options: {
-                      address: this.props.wallet.contractToken._address,
-                      symbol: 'CSC',
-                      decimals: 18,
-                      image: 'https://cryptosoccermarket.com/assets/img/coin.png',
-                    },
-                  },
-                })
-                  .then((success) => {
-                    if (success) {
-                      console.log('FOO successfully added to wallet!')
-                    } else {
-                      throw new Error('Something went wrong.')
-                    }
-                  })
-                  .catch(console.error)}
-                }>
-               <i className="fas fa-plus-square"></i> Add CSC token to metamask
-              </button>
-              </p>
+              
               <button
                 className="btn btn-success"
                 onClick={() => this.update()}
               >
-               <i className="fas fa-sync"></i> Refresh web page
+               <i className="fas fa-sync"></i> Conect
               </button>
             </div>
 
-            <div className="col-lg-4 col-md-4 ">
-
-            <h2>Email Registred on Market</h2>
-                {this.state.email}
-              <br /><br />
-              <button
-                className="btn btn-secondary"
-                onClick={() => this.updateEmail()}
-              >
-                <i className="fas fa-envelope-open-text"></i> Update Email
-              </button>
-
-             
-            </div>
-
-            <div className="col-lg-4 col-md-4">
+            <div className="col-lg-6 col-md-6">
 
             <h2>GAME data</h2>
 
@@ -974,7 +921,7 @@ this.update();
           
             <div className="col-lg-4 col-md-12 mt-2">
             <img
-                src="assets/favicon.ico"
+                src="images/logo.png"
                 className="meta-gray"
                 width="100"
                 height="100" 
@@ -982,7 +929,7 @@ this.update();
 
             <h3>MARKET</h3>
               <span>
-                CSC: {this.state.balance}
+                BNB: {this.state.balance}
               </span>
               <br/><br/>
               
@@ -1011,7 +958,7 @@ this.update();
 
             <div className="col-lg-4 col-md-12  mt-2">
             <a href="https://bscscan.com/address/0x2846df5d668C1B4017562b7d2C1E471373912509#tokentxns"><img
-                src="assets/favicon.ico"
+                src="images/logo.png"
                 className="meta-gray"
                 width="100"
                 height="100" 
@@ -1130,7 +1077,7 @@ this.update();
 
             <div className="col-lg-4 col-md-12  mt-2">
             <img
-                src="assets/favicon.ico"
+                src="images/logo.png"
                 className="meta-gray"
                 width="100"
                 height="100" 
