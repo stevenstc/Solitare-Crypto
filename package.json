@@ -1,5 +1,5 @@
 {
-  "name": "brutustoken",
+  "name": "solitaire-crypto-dapp",
   "version": "0.1.0",
   "description": "Es la aplicacion para hacer Crowd Funding en la Blockchain tron",
   "scripts": {
@@ -7,8 +7,8 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js && npx rimraf docs && npx move-cli build docs"
   },
-  "author": "brutustoken",
-  "license": "Apache 2.0",
+  "author": "solitaire-crypto",
+  "license": "Apache-2.0",
   "homepage": "https://cryptosoccermarket.ml/",
   "dependencies": {
     "@babel/core": "7.8.4",
