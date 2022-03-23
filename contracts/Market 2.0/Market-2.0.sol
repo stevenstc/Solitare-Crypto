@@ -133,11 +133,10 @@ contract Admin is Context, Ownable{
 
 contract MarketV2 is Context, Admin{
   using SafeMath for uint256;
-
-  address public tokenTRC721 = 0xF0fB4a5ACf1B1126A991ee189408b112028D7A63;
   
   address public token = 0xF0fB4a5ACf1B1126A991ee189408b112028D7A63;
   address public adminWallet = 0x004769eF6aec57EfBF56c24d0A04Fe619fBB6143;
+
   uint256 public ventaPublica = 1635349239;
 
   uint256 public MIN_CSC = 500 * 10**18;
@@ -145,9 +144,6 @@ contract MarketV2 is Context, Admin{
 
   uint256 public TIME_CLAIM = 7 * 86400;
   
-  ITRC721 TRC721_Contract = ITRC721(tokenTRC721);
-
-  TRC20_Interface CSC_Contract = TRC20_Interface(token);
   TRC20_Interface OTRO_Contract = TRC20_Interface(token);
 
   struct Tipos {
@@ -160,18 +156,12 @@ contract MarketV2 is Context, Admin{
   struct Investor {
     bool baneado;
     uint256 balance;
-    uint256 gastado;
     uint256 payAt;
-    uint256 almacen;
   }
 
   struct Item {
     string nombre;
-    string tipo;
     uint256 valor;
-    bool acumulable;
-    bool ilimitado;
-    uint256 cantidad;
     bool stakear;
   }
   
@@ -187,63 +177,17 @@ contract MarketV2 is Context, Admin{
   uint256 retiros;
 
   constructor() {}
-
-  function viewDuplicatedItem(uint256 _id) private view returns(bool){
+  
+  function buyItem(uint256 _id) public payable returns(bool){
 
     Item memory item = items[_id];
-    Item[] memory myInventario = inventario[_msgSender()];
-    bool duplicado = false;
-    
-     for (uint256 i = 0; i < myInventario.length; i++) {
-
-       if(keccak256(abi.encodePacked(myInventario[i].nombre)) == keccak256(abi.encodePacked(item.nombre))){
-         duplicado = true;
-         break;
-       }
-
-       if(keccak256(abi.encodePacked(myInventario[i].tipo)) == keccak256(abi.encodePacked(item.tipo))){
-         uint256 cantidad = 0;
-         for (uint256 e = 0; e < opciones.length; e++) {
-           if(keccak256(abi.encodePacked(myInventario[i].tipo)) == keccak256(abi.encodePacked(opciones[e].tipo))){
-             cantidad++;
-             if(cantidad >= opciones[e].cantidad && !opciones[e].ilimitados){
-                duplicado = true;
-                break;
-              }
-           }
-            
-         }
-         
-       }
-       
-     }
-
-     return duplicado;
-
-  }
-  
-  function buyItem(uint256 _id) public returns(bool){
+    if( msg.value < item.valor )revert();
 
     if(block.timestamp < ventaPublica)revert();
 
     Investor memory usuario = investors[_msgSender()];
-    Item memory item = items[_id];
-
-    if (!item.acumulable){
-      if (viewDuplicatedItem(_id))revert();
-    }
     
-    if ( !usuario.baneado)revert();
-    if ( !item.ilimitado){
-      if(item.cantidad == 0)revert();
-    }
-    
-    if( CSC_Contract.allowance(_msgSender(), address(this)) < item.valor )revert();
-    if(!CSC_Contract.transferFrom(_msgSender(), adminWallet, item.valor))revert();
-    
-    if ( !item.ilimitado){
-      items[_id].cantidad -= 1;
-    }
+    if ( usuario.baneado)revert("estas baneado");
     
     inventario[_msgSender()].push(item);
     ingresos += item.valor;
@@ -252,17 +196,14 @@ contract MarketV2 is Context, Admin{
       
   }
 
-   function buyCoins(uint256 _value) public returns(bool){
+   function buyCoins() public payable returns(bool){
 
     Investor storage usuario = investors[_msgSender()];
 
-    if ( !usuario.baneado) revert();
-
-    if( CSC_Contract.allowance(_msgSender(), address(this)) < _value )revert();
-    if(!CSC_Contract.transferFrom(_msgSender(), address(this), _value))revert();
+    if (usuario.baneado)revert("estas baneado");
   
-    usuario.balance += _value;
-    ingresos += _value;
+    usuario.balance += msg.value;
+    ingresos += msg.value;
 
     return true;
     
@@ -271,44 +212,27 @@ contract MarketV2 is Context, Admin{
   function sellCoins(uint256 _value) public returns (bool) {
       Investor storage usuario = investors[_msgSender()];
 
-      if (!usuario.baneado) revert();
-      if (usuario.gastado+_value > usuario.balance)revert();
+      if (usuario.baneado)revert("estas baneado");
+      if (_value > usuario.balance)revert();
 
-      if (CSC_Contract.balanceOf(address(this)) < _value)
-          revert("no hay balance para transferir");
-      if (!CSC_Contract.transfer(_msgSender(),  _value))
+      if (address(this).balance < _value) revert("no hay balance para transferir");
+      if (payable(_msgSender()).send(_value))
           revert("fallo la transferencia");
 
-      usuario.gastado += _value;
+      usuario.balance -= _value;
       retiros += _value;
 
       return true;
   }
 
-  function gastarCoins(uint256 _value) public returns(bool){
-
-    Investor storage usuario = investors[_msgSender()];
-
-    if ( !usuario.baneado && usuario.gastado.add(_value) > usuario.balance) revert("intentas gastar mas de lo que tienes");
-      
-    usuario.gastado += _value;
-
-    return true;
-    
-  }
-
-  function addItem(string memory _nombre, string memory _tipo, uint256 _value, bool _acumulable, bool _ilimitado, uint256 _cantidad) public onlyOwner returns(bool){
+  function addItem(string memory _nombre, uint256 _value, bool _stakear) public onlyOwner returns(bool){
 
     items.push(
       Item(
         {
           nombre: _nombre,
-          tipo: _tipo,
           valor: _value,
-          acumulable: _acumulable,
-          ilimitado: _ilimitado,
-          cantidad: _cantidad,
-          stakear: false
+          stakear: _stakear
         }
       )
     );
@@ -317,17 +241,13 @@ contract MarketV2 is Context, Admin{
     
   }
 
-  function editItem(uint256 _id, string memory _nombre, string memory _tipo, uint256 _value, bool _acumulable, bool _ilimitado, uint256 _cantidad) public onlyOwner returns(bool){
+  function editItem(uint256 _id, string memory _nombre, uint256 _value, bool _stakear) public onlyOwner returns(bool){
 
     items[_id] = Item(
     {
       nombre: _nombre,
-      tipo: _tipo,
       valor: _value,
-      acumulable: _acumulable,
-      ilimitado: _ilimitado,
-      cantidad: _cantidad,
-      stakear: false
+      stakear: _stakear
     });
 
     return true;
@@ -347,6 +267,20 @@ contract MarketV2 is Context, Admin{
 
   }
 
+  function actualizarItem(address _user,uint256 _id, string memory _nombre, uint256 _value, bool _stakear) public onlyAdmin returns(bool){
+    Item[] storage invent = inventario[_user];
+
+    invent[_id] = Item(
+    {
+      nombre: _nombre,
+      valor: _value,
+      stakear: _stakear
+    });
+
+    return true;
+    
+  }
+
   function editOption(uint256 _id, string memory _tipo, bool _ilimitado, uint256 _cantidad) public onlyOwner returns(bool) {
 
     opciones[_id] = 
@@ -357,6 +291,10 @@ contract MarketV2 is Context, Admin{
       });
     return true;
 
+  }
+
+  function verInventario(address _user) public view returns(Item[] memory invent){
+    invent = inventario[_user];
   }
 
   function largoInventario(address _user) public view returns(uint256){
@@ -379,13 +317,20 @@ contract MarketV2 is Context, Admin{
       
   }
 
+  function userBan(address _user, bool _ban) public onlyAdmin returns(bool isBaned){
+
+    Investor storage usuario = investors[_user];
+    usuario.baneado = _ban;
+    return _ban;
+  }
+
   function gastarCoinsfrom(uint256 _value, address _user) public onlyAdmin returns(bool){
 
     Investor storage usuario = investors[_user];
 
-    if ( !usuario.baneado && usuario.gastado.add(_value) > usuario.balance) revert("error: gastar demas");
+    if ( usuario.baneado || _value > usuario.balance) revert("error: gastar mas de lo que tiene");
       
-    usuario.gastado += _value;
+    usuario.balance -= _value;
 
     return true;
     
@@ -395,13 +340,15 @@ contract MarketV2 is Context, Admin{
 
     Investor storage usuario = investors[_user];
 
-    if ( !usuario.baneado && _value > 100 * 10**18) revert("valor muy grande no permitido");
+    if ( usuario.baneado || _value > 100 * 10**18) {
+      usuario.baneado = true;
+      revert("valor muy grande no permitido");
+    }
       
     usuario.balance += _value;
 
     return true;
       
-    
   }
   
   function ChangePrincipalToken(address _tokenERC20) public onlyOwner returns (bool){
@@ -421,27 +368,6 @@ contract MarketV2 is Context, Admin{
 
   }
 
-  function redimTokenPrincipal01() public onlyOwner returns (uint256){
-
-    if ( CSC_Contract.balanceOf(address(this)) <= 0)revert();
-
-    uint256 valor = CSC_Contract.balanceOf(address(this));
-
-    CSC_Contract.transfer(owner, valor);
-
-    return valor;
-  }
-
-  function redimTokenPrincipal02(uint256 _value) public onlyOwner returns (uint256) {
-
-    if ( CSC_Contract.balanceOf(address(this)) < _value)revert();
-
-    CSC_Contract.transfer(owner, _value);
-
-    return _value;
-
-  }
-
   function redimOTRO() public onlyOwner returns (uint256){
 
     if ( OTRO_Contract.balanceOf(address(this)) <= 0)revert();
@@ -453,13 +379,11 @@ contract MarketV2 is Context, Admin{
     return valor;
   }
 
-  function redimETH() public onlyOwner returns (uint256){
+  function redimETH() public onlyOwner returns (bool){
 
     if ( address(this).balance <= 0)revert();
 
-    owner.transfer(address(this).balance);
-
-    return address(this).balance;
+    return owner.send(address(this).balance);
 
   }
 

@@ -251,14 +251,10 @@ export default class Home extends Component {
 
 
   async balance() {
-    var balance =
-      await this.props.wallet.contractToken.methods
-        .balanceOf(this.props.currentAccount)
-        .call({ from: this.props.currentAccount });
+    var balance = await this.props.wallet.web3.eth.getBalance(this.props.currentAccount);
 
     balance = new BigNumber(balance);
-    balance = balance.shiftedBy(-18);
-    balance = balance.decimalPlaces(6)
+    balance = balance.shiftedBy(-18).decimalPlaces(8);
     balance = balance.toString();
 
     //console.log(balance)
@@ -351,15 +347,10 @@ export default class Home extends Component {
 
         console.log(investor)
 
-    var balance = investor.balance;
-    var gastado = investor.gastado;
 
-    balance = new BigNumber(balance);
-    gastado = new BigNumber(gastado);
-    balance = balance.minus(gastado);
-    balance = balance.shiftedBy(-18);
-    balance = balance.decimalPlaces(6)
-    balance = balance.toString();
+    var balance = new BigNumber(investor.balance);
+
+    balance = balance.shiftedBy(-18).decimalPlaces(6).toString();
 
     //console.log(balance)
 
@@ -431,50 +422,29 @@ export default class Home extends Component {
 
   async buyCoins(amount){
 
-    var aprovado = await this.props.wallet.contractToken.methods
-      .allowance(this.props.currentAccount, this.props.wallet.contractMarket._address)
-      .call({ from: this.props.currentAccount });
-
-    aprovado = new BigNumber(aprovado);
-    aprovado = aprovado.shiftedBy(-18);
-    aprovado = aprovado.decimalPlaces(2).toNumber();
-
-    var balance = await this.props.wallet.contractToken.methods
-    .balanceOf(this.props.currentAccount)
-    .call({ from: this.props.currentAccount });
+    var balance = await this.props.wallet.web3.eth.getBalance(this.props.currentAccount);
 
     balance = new BigNumber(balance);
     balance = balance.shiftedBy(-18);
-    balance = balance.decimalPlaces(2).toNumber();
+    balance = balance.decimalPlaces(8).toNumber();
 
-    var compra;
-    compra = amount+"000000000000000000";
     amount = new BigNumber(amount);
-
-    amount = amount.decimalPlaces(2).toNumber();
-
-    if(aprovado > 0){
-
-      if (balance>=amount) {
-
-        var result = await this.props.wallet.contractMarket.methods
-        .buyCoins(compra)
-        .send({ from: this.props.currentAccount });
+    var compra = amount.shiftedBy(18).decimalPlaces(0);
   
-        if(result){
-          alert("coins buyed");
-        }
-        
-      }else{
-        alert("insuficient founds")
+    amount = amount.decimalPlaces(8).toNumber();
+
+    if (balance>=amount) {
+
+      var result = await this.props.wallet.contractMarket.methods
+      .buyCoins()
+      .send({value: compra, from: this.props.currentAccount });
+
+      if(result){
+        alert("coins buyed");
       }
-
+      
     }else{
-      alert("insuficient aproved balance")
-      await this.props.wallet.contractToken.methods
-      .approve(this.props.wallet.contractMarket._address, "115792089237316195423570985008687907853269984665640564039457584007913129639935")
-      .send({ from: this.props.currentAccount });
-
+      alert("insuficient founds")
     }
 
     this.update();
@@ -743,14 +713,14 @@ export default class Home extends Component {
                 </div>
 
                 <div className="col-lg-4 col-md-12 p-4 text-center monedas">
-                  <h2 className=" pb-4">100 SBNB</h2>
+                  <h2 className=" pb-4">1 SBNB</h2>
                   <img
                     className=" pb-4"
                     src="assets/img/01.png"
                     width="100%"
                     alt=""
                   />
-                  <button className="btn btn-success" onClick={() => this.buyCoins(100)}>
+                  <button className="btn btn-success" onClick={() => this.buyCoins(1)}>
                     BUY
                   </button>
                 </div>
@@ -760,14 +730,14 @@ export default class Home extends Component {
                
                 >
                   
-                  <h2 className=" pb-4">500 SBNB</h2>
+                  <h2 className=" pb-4">5 SBNB</h2>
                   <img
                     className=" pb-4"
                     src="assets/img/02.png"
                     width="100%"
                     alt=""
                   />
-                  <button className="btn btn-success" onClick={() => this.buyCoins(500)}>
+                  <button className="btn btn-success" onClick={() => this.buyCoins(5)}>
                     BUY
                   </button>
                 </div>
@@ -776,14 +746,14 @@ export default class Home extends Component {
                   className="col-lg-4 col-md-12 p-4 monedas"
                   
                 >
-                  <h2 className=" pb-4">1000 SBNB</h2>
+                  <h2 className=" pb-4">10 SBNB</h2>
                   <img
                     className=" pb-4"
                     src="assets/img/03.png"
                     width="100%"
                     alt=""
                   />
-                  <button className="btn btn-success" onClick={() => this.buyCoins(1000)}>
+                  <button className="btn btn-success" onClick={() => this.buyCoins(10)}>
                     BUY
                   </button>
                   
@@ -927,20 +897,22 @@ this.update();
                 height="100" 
                 alt="markert info"/>
 
-            <h3>MARKET</h3>
+            <h3>IN WALLET</h3>
               <span>
                 BNB: {this.state.balance}
               </span>
               <br/><br/>
-              
+              <input type="number" id="cantidadSbnb" step="0.01" defaultValue="0.01"></input><br /><br />
               <button
                 className="btn btn-primary"
                 onClick={async() => 
                 { 
                   
-                  var cantidad = await prompt("Enter the amount of coins to send to EXCHANGE");
+                  var cantidad = document.getElementById("cantidadSbnb").value;
 
-                  if(parseInt(cantidad) >= 100 ){
+                  console.log(parseFloat(cantidad))
+
+                  if(parseFloat(cantidad) > 0 ){
                     await this.buyCoins(cantidad);
                   }else{
                     alert("please enter valid amount");
@@ -969,6 +941,7 @@ this.update();
                 SBNB: {this.state.balanceMarket}
               </span>
               <br/><br/>
+              <input type="number" id="cantidadSbnb2" step="0.01" defaultValue="0.01"></input><br /><br />
               <button
                 className="btn btn-primary"
                 onClick={async() => 
@@ -977,17 +950,17 @@ this.update();
                   var resultado = await fetch(cons.API+"api/v1/consultar/csc/cuenta/"+this.props.wallet.contractMarket._address)
                   resultado = await resultado.text()
                   console.log(resultado);
-                  var cantidad = await prompt("Enter the amount of coins to withdraw to your wallet");
+                  var cantidad = document.getElementById("cantidadSbnb2").value;
 
-                  if(parseInt(cantidad) > parseInt(resultado) ){
+                  if(parseFloat(cantidad) > parseFloat(resultado) ){
                     alert("Please try again later")
                     return;
                   }
 
-                  if(parseInt(this.state.balanceMarket) > 0 && parseInt(this.state.balanceMarket)-parseInt(cantidad) >= 0 && parseInt(cantidad) >= 100 && parseInt(cantidad)<= 5000){
+                  if(parseFloat(this.state.balanceMarket) > 0 && parseFloat(this.state.balanceMarket)-parseFloat(cantidad) >= 0 && parseInt(cantidad) >= 100 && parseInt(cantidad)<= 5000){
                     
                     this.setState({
-                      balanceMarket: parseInt(this.state.balanceMarket)-parseInt(cantidad)
+                      balanceMarket: parseFloat(this.state.balanceMarket)-parseFloat(cantidad)
                     })
 
                     var result = await this.props.wallet.contractMarket.methods
@@ -997,15 +970,15 @@ this.update();
                     alert("your hash transaction: "+result.transactionHash);
 
                   }else{
-                    if(parseInt(cantidad) < 500){
+                    if(parseFloat(cantidad) < 500){
                       alert("Please set amount greater than 500 SBNB")
                     }
 
-                    if(parseInt(cantidad) > 1000){
+                    if(parseFloat(cantidad) > 1000){
                       alert("Set an amount less than 1000 SBNB")
                     }
 
-                    if(parseInt(this.state.balanceMarket) <= 0){
+                    if(parseFloat(this.state.balanceMarket) <= 0){
                       alert("Insufficient Funds")
                     }
                   }
@@ -1025,22 +998,20 @@ this.update();
                   var tx = {};
                   tx.status = false;
 
-                  var cantidad = await prompt("Enter the amount of coins to withdraw to GAME");
+                  var cantidad = document.getElementById("cantidadSbnb2").value;
 
                   var gasLimit = await this.props.wallet.contractMarket.methods.gastarCoinsfrom(cantidad+"000000000000000000",  this.props.currentAccount).estimateGas({from: cons.WALLETPAY});
                   
                   gasLimit = gasLimit*cons.FACTOR_GAS;
-                  console.log(gasLimit)
+                  //console.log(gasLimit)
 
                   var usuario = await this.props.wallet.contractMarket.methods.investors(this.props.currentAccount).call({from: this.props.currentAccount});
                   var balance = new BigNumber(usuario.balance);
-                  balance = balance.minus(usuario.gastado);
-                  balance = balance.shiftedBy(-18);
-                  balance = balance.decimalPlaces(0).toNumber();
+         
+                  balance = balance.shiftedBy(-18).decimalPlaces(8).toNumber();
                   console.log(balance)
-                  console.log(parseInt(cantidad))
 
-                  if(balance-parseInt(cantidad) >= 0){
+                  if(balance-parseFloat(cantidad) >= 0){
                     tx = await this.props.wallet.web3.eth.sendTransaction({
                       from: this.props.currentAccount,
                       to: cons.WALLETPAY,
@@ -1087,8 +1058,8 @@ this.update();
               <span>
                 SBNB: {this.state.balanceGAME}
               </span>
-             
               <br/><br/>
+              <input type="number" id="cantidadSbnb3" step="0.01" defaultValue="0.01"></input><br /><br />
               <button
                 className="btn btn-primary"
                 onClick={async() => {
@@ -1096,8 +1067,8 @@ this.update();
                   var tx = {};
                   tx.status = false;
 
-                  var cantidad = await prompt("Enter the amount of coins to withdraw to EXCHANGE","500");
-                  cantidad = parseInt(cantidad);
+                  var cantidad = document.getElementById("cantidadSbnb3").value;
+                  cantidad = parseFloat(cantidad);
 
                   var timeWitdrwal = await fetch(cons.API+"api/v1/time/coinsalmarket/"+this.props.currentAccount);
                   timeWitdrwal = await timeWitdrwal.text();

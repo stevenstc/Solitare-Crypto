@@ -59,8 +59,6 @@ export default class Market extends Component {
 
   async buyItem(id){
 
-    console.log("ento a comprar un bendito item")
-
     var aprovado = await this.props.wallet.contractToken.methods
       .allowance(this.props.currentAccount, this.props.wallet.contractMarket._address)
       .call({ from: this.props.currentAccount });
@@ -105,31 +103,22 @@ export default class Market extends Component {
 
   async buyCoins(amount){
 
-    var aprovado = await this.props.wallet.contractToken.methods
-    .allowance(this.props.currentAccount, this.props.wallet.contractMarket._address)
+    var balance = await this.props.wallet.contractToken.methods
+    .balanceOf(this.props.currentAccount)
     .call({ from: this.props.currentAccount });
 
-  aprovado = new BigNumber(aprovado);
-  aprovado = aprovado.shiftedBy(-18);
-  aprovado = aprovado.decimalPlaces(2).toNumber();
+    balance = new BigNumber(balance);
+    balance = balance.shiftedBy(-18);
+    balance = balance.decimalPlaces(8).toNumber();
 
-  var balance = await this.props.wallet.contractToken.methods
-  .balanceOf(this.props.currentAccount)
-  .call({ from: this.props.currentAccount });
+    var compra;
 
-  balance = new BigNumber(balance);
-  balance = balance.shiftedBy(-18);
-  balance = balance.decimalPlaces(2).toNumber();
+    if(amount === 1)compra = "1000000000000000000";
+    if(amount === 5)compra = "5000000000000000000";
+    if(amount === 10)compra = "10000000000000000000";
 
-  var compra;
-  if(amount === 100)compra = "100000000000000000000";
-  if(amount === 500)compra = "500000000000000000000";
-  if(amount === 1000)compra = "1000000000000000000000";
-  amount = new BigNumber(amount);
-
-  amount = amount.decimalPlaces(2).toNumber();
-
-  if(aprovado > 0){
+    amount = new BigNumber(amount);
+    amount = amount.decimalPlaces(8).toNumber();
 
     if (balance>=amount) {
 
@@ -144,14 +133,6 @@ export default class Market extends Component {
     }else{
       alert("insuficient founds")
     }
-
-  }else{
-    alert("insuficient aproved balance")
-    await this.props.wallet.contractToken.methods
-    .approve(this.props.wallet.contractMarket._address, "115792089237316195423570985008687907853269984665640564039457584007913129639935")
-    .send({ from: this.props.currentAccount });
-
-  }
 
     this.update();
 
@@ -262,7 +243,7 @@ export default class Market extends Component {
         <div className="container px-5">
         <div className="row">
             <div className="col-lg-12 col-md-12 p-4 text-center bg-secondary bg-gradient">
-              <h2 className=" pb-4">CSC available:</h2><br></br>
+              <h2 className=" pb-4">BNB available:</h2><br></br>
               <h3 className=" pb-4">{this.state.balance}</h3>
             </div>
 

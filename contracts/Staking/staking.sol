@@ -48,17 +48,13 @@ interface TRC20_Interface {
 }
 
 abstract contract Context {
+    function _msgSender() internal view virtual returns (address) {
+        return msg.sender;
+    }
 
-  constructor () { }
-
-  function _msgSender() internal view returns (address payable) {
-    return payable(msg.sender);
-  }
-
-  function _msgData() internal view returns (bytes memory) {
-    this; 
-    return msg.data;
-  }
+    function _msgData() internal view virtual returns (bytes calldata) {
+        return msg.data;
+    }
 }
 
 contract Ownable is Context {
