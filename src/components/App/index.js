@@ -211,7 +211,7 @@ class App extends Component {
             case "inventory":
               return(<Inventory wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>);
             default:
-              return(<Inventory wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>);
+              return(<Staking wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>);
           } 
         }else{
           return(<div className="container"><h1 className="text-center">Loading...</h1></div>);

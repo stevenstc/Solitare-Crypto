@@ -25,8 +25,8 @@ export default class HomeStaking extends Component {
 
   async balance() {
     var val = await this.props.wallet.contractToken.methods
-        .balanceOf(this.props.currentAccount)
-        .call({ from: this.props.currentAccount });
+    .balanceOf(this.props.currentAccount)
+    .call({ from: this.props.currentAccount });
     document.getElementById("getValue").innerHTML = (val/10**18).toFixed(8);
   }
 
@@ -143,11 +143,52 @@ export default class HomeStaking extends Component {
         <header className="masthead text-center text-white">
           <div className="masthead-content">
             <div className="container px-5">
+
+              <div className="row">
+                <div className="col-md-12">
+                  <h1>STAKING YOUR CARD GAME</h1>
+                </div>
+
+                <div className="col-md-12">
+                  <h2>Flexible</h2>
+                </div>
+
+                <div className="col-md-4" onClick={()=>{this.staking(false,0)}} style={{cursor: "pointer"}}>
+                  <img src="images/plan1.1.png" alt="imagen del plan 1.1"/>
+                </div>
+                <div className="col-md-4" onClick={()=>{this.staking(false, 1)}} style={{cursor: "pointer"}}>
+                  <img src="images/plan1.2.png" alt="imagen del plan 1.2"/>
+                </div>
+                <div className="col-md-4" onClick={()=>{this.staking(false, 2)}} style={{cursor: "pointer"}}>
+                  <img src="images/plan1.3.png" alt="imagen del plan 1.3"/>
+                </div>
+                
+              </div>
+
+              <hr></hr>
+
+              <div className="row">
+                <div className="col-md-12">
+                  <h2>Locked</h2>
+                </div>
+
+                <div className="col-md-4" onClick={()=>{this.staking(true, 0)}} style={{cursor: "pointer"}}>
+                  <img src="images/plan2.1.png" alt="imagen del plan 2.1"/>
+                </div>
+                <div className="col-md-4" onClick={()=>{this.staking(true, 1)}} style={{cursor: "pointer"}}>
+                  <img src="images/plan2.2.png" alt="imagen del plan 2.2"/>
+                </div>
+                <div className="col-md-4" onClick={()=>{this.staking(true, 2)}} style={{cursor: "pointer"}}>
+                  <img src="images/plan2.3.png" alt="imagen del plan 2.3"/>
+                </div>
+                
+              </div>
+
               <div className="row justify-content-md-center">
                 <div className="col-md-auto text-center">
-                  <h2 className=" pb-4">STAKING YOUR SBNB</h2>
+                  <h2 className=" pb-4"> 222</h2>
                   <input type="number" className="form-control" id="cantidadSBNB" placeholder="Min. 200 SBNB"/><br />
-                  <button className="btn btn-warning" onClick={()=> this.staking()}><b>Stake SBNB</b></button>
+                  <button className="btn btn-warning" onClick={()=> this.staking()}><b>Stake</b></button>
 
                 </div>
 

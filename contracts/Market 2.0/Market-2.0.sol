@@ -281,6 +281,17 @@ contract MarketV2 is Context, Admin{
     
   }
 
+  function NoStakingCard(address _user,uint256 _carta)public onlyAdmin returns(bool){
+    Item[] storage invent = inventario[_user];
+    invent[_carta].stakear = false;
+    return true;
+  }
+
+  function consultarCarta(address _user, uint _carta) public view returns(uint256) {
+    Item[] memory invent = inventario[_user];
+    return invent[_carta].stakear == true ? invent[_carta].valor : 0 ;
+  }
+
   function editOption(uint256 _id, string memory _tipo, bool _ilimitado, uint256 _cantidad) public onlyOwner returns(bool) {
 
     opciones[_id] = 
