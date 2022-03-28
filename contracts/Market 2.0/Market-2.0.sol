@@ -134,24 +134,16 @@ contract Admin is Context, Ownable{
 contract MarketV2 is Context, Admin{
   using SafeMath for uint256;
   
-  address public token = 0xF0fB4a5ACf1B1126A991ee189408b112028D7A63;
-  address public adminWallet = 0x004769eF6aec57EfBF56c24d0A04Fe619fBB6143;
+  address payable public adminWallet = payable(0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d);
+  address payable public stakingContract = payable(0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d);
 
-  uint256 public ventaPublica = 1635349239;
+  uint256 public ventaPublica = 1648503749;
 
-  uint256 public MIN_CSC = 500 * 10**18;
-  uint256 public MAX_CSC = 10000 * 10**18;
+  uint256 public MAX_BNB = 1 * 10**18;
 
-  uint256 public TIME_CLAIM = 7 * 86400;
+  uint256 public TIME_CLAIM = 1 * 86400;
   
-  TRC20_Interface OTRO_Contract = TRC20_Interface(token);
-
-  struct Tipos {
-    string tipo;
-    bool ilimitados;
-    uint256 cantidad;
-
-  }
+  TRC20_Interface OTRO_Contract;
 
   struct Investor {
     bool baneado;
@@ -167,14 +159,8 @@ contract MarketV2 is Context, Admin{
   
   mapping (address => Investor) public investors;
   mapping (address => Item[]) public inventario;
-  mapping (uint256 => address) public nfts;
-  mapping (uint256 => address) public idNfts;
   
   Item[] public items;
-  Tipos[] public opciones;
-
-  uint256 ingresos;
-  uint256 retiros;
 
   constructor() {}
   
@@ -190,7 +176,6 @@ contract MarketV2 is Context, Admin{
     if ( usuario.baneado)revert("estas baneado");
     
     inventario[_msgSender()].push(item);
-    ingresos += item.valor;
 
     return true;
       
@@ -202,8 +187,11 @@ contract MarketV2 is Context, Admin{
 
     if (usuario.baneado)revert("estas baneado");
   
-    usuario.balance += msg.value;
-    ingresos += msg.value;
+    uint _valor = msg.value;
+    usuario.balance += _valor;
+    adminWallet.transfer(_valor.mul(2).div(100));
+    stakingContract.transfer(_valor.mul(8).div(100));
+
 
     return true;
     
@@ -220,7 +208,6 @@ contract MarketV2 is Context, Admin{
           revert("fallo la transferencia");
 
       usuario.balance -= _value;
-      retiros += _value;
 
       return true;
   }
@@ -254,19 +241,6 @@ contract MarketV2 is Context, Admin{
     
   }
 
-  function addOption(string memory _tipo, bool _ilimitado, uint256 _cantidad) public onlyOwner returns(bool) {
-
-    opciones.push(
-      Tipos({
-        tipo : _tipo,
-        ilimitados: _ilimitado,
-        cantidad: _cantidad
-      })
-    );
-    return true;
-
-  }
-
   function actualizarItem(address _user,uint256 _id, string memory _nombre, uint256 _value, bool _stakear) public onlyAdmin returns(bool){
     Item[] storage invent = inventario[_user];
 
@@ -292,18 +266,6 @@ contract MarketV2 is Context, Admin{
     return invent[_carta].stakear == true ? invent[_carta].valor : 0 ;
   }
 
-  function editOption(uint256 _id, string memory _tipo, bool _ilimitado, uint256 _cantidad) public onlyOwner returns(bool) {
-
-    opciones[_id] = 
-      Tipos({
-        tipo : _tipo,
-        ilimitados: _ilimitado,
-        cantidad: _cantidad
-      });
-    return true;
-
-  }
-
   function verInventario(address _user) public view returns(Item[] memory invent){
     invent = inventario[_user];
   }
@@ -319,12 +281,6 @@ contract MarketV2 is Context, Admin{
   function largoItems() public view returns(uint256){
 
     return items.length;
-      
-  }
-  
-  function largoOptions() public view returns(uint256){
-
-    return opciones.length;
       
   }
 
@@ -362,11 +318,14 @@ contract MarketV2 is Context, Admin{
       
   }
   
-  function ChangePrincipalToken(address _tokenERC20) public onlyOwner returns (bool){
+  function UpdateAdminWallet(address payable _adminWallet) public onlyOwner returns (bool){
+    adminWallet = _adminWallet;
+    return true;
+  }
 
-    OTRO_Contract = TRC20_Interface(_tokenERC20);
-    token = _tokenERC20;
+  function UpdateStakingContract(address payable _stakingContract) public onlyOwner returns (bool){
 
+    stakingContract = _stakingContract;
     return true;
 
   }
