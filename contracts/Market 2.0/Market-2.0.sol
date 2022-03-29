@@ -136,12 +136,10 @@ contract MarketV2 is Context, Admin{
   
   address payable public adminWallet = payable(0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d);
   address payable public stakingContract = payable(0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d);
-
   uint256 public ventaPublica = 1648503749;
-
   uint256 public MAX_BNB = 1 * 10**18;
-
   uint256 public TIME_CLAIM = 1 * 86400;
+  uint256[] public niveles = [3, 2, 1];
   
   TRC20_Interface OTRO_Contract;
 
@@ -157,28 +155,47 @@ contract MarketV2 is Context, Admin{
     bool stakear;
   }
   
+  mapping (address => address) public upline;
   mapping (address => Investor) public investors;
   mapping (address => Item[]) public inventario;
   
   Item[] public items;
 
   constructor() {}
+
+  function referRedward(address _user, uint256 _value) private {
+
+    Investor storage usuario;
+    for (uint256 index = 0; index < niveles.length; index++) {
+      if(_user == address(0))break;
+      usuario = investors[upline[_user]];
+      usuario.balance += _value.mul(niveles[index]).div(100);
+      _user = upline[_user];
+      
+    }
+  }
   
-  function buyItem(uint256 _id) public payable returns(bool){
+  function buyItem(uint256 _id, address _upline) public payable returns(bool){
 
     Item memory item = items[_id];
-    if( msg.value < item.valor )revert();
+    if( msg.value < item.valor )revert("por favor envie suficiente bnb");
 
-    if(block.timestamp < ventaPublica)revert();
+    if(block.timestamp < ventaPublica)revert("no es tiempo de la venta publica");
 
     Investor memory usuario = investors[_msgSender()];
-    
-    if ( usuario.baneado)revert("estas baneado");
-    
-    inventario[_msgSender()].push(item);
+    adminWallet.transfer(msg.value.mul(10).div(100));
 
-    return true;
-      
+    if ( usuario.baneado){
+      return false;
+    }else{
+      if(_upline != address(0) && upline[_msgSender()] == address(0)){
+        upline[_msgSender()] = _upline;
+      }
+      referRedward(_msgSender(), item.valor);
+      inventario[_msgSender()].push(item);
+      return true;
+    }
+    
   }
 
    function buyCoins() public payable returns(bool){

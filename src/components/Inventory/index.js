@@ -703,17 +703,16 @@ export default class Home extends Component {
 
     return (
       <>
+      
         <header className="masthead text-center text-white">
           <div className="masthead-content">
             <div className="container px-5">
               
               <div className="row">
-                <div className="col-lg-12 col-md-12 p-4 text-center">
-                  <h2 className=" pb-4">Coin Packs</h2>
-                </div>
 
-                <div className="col-lg-4 col-md-12 p-4 text-center monedas">
-                  <h2 className=" pb-4">1 SBNB</h2>
+              <div className="col-lg-3 col-md-12 p-4 text-center monedas">
+                  
+                  <h2 className=" pb-4">BASICA</h2>
                   <img
                     className=" pb-4"
                     src="assets/img/01.png"
@@ -721,40 +720,54 @@ export default class Home extends Component {
                     alt=""
                   />
                   <button className="btn btn-success" onClick={() => this.buyCoins(1)}>
-                    BUY
+                    BUY for 0.025 BNB
+                  </button>
+                </div>
+
+                <div className="col-lg-3 col-md-12 p-4 text-center monedas">
+   
+                  <h2 className=" pb-4">POPULAR</h2>
+                  <img
+                    className=" pb-4"
+                    src="assets/img/01.png"
+                    width="100%"
+                    alt=""
+                  />
+                  <button className="btn btn-success" onClick={() => this.buyCoins(1)}>
+                    BUY for 0.05 BNB
                   </button>
                 </div>
 
                 <div 
-                  className="col-lg-4 col-md-12 p-4 monedas"
+                  className="col-lg-3 col-md-12 p-4 monedas"
                
                 >
                   
-                  <h2 className=" pb-4">5 SBNB</h2>
+                  <h2 className=" pb-4">PREMIUM</h2>
                   <img
                     className=" pb-4"
                     src="assets/img/02.png"
                     width="100%"
                     alt=""
                   />
-                  <button className="btn btn-success" onClick={() => this.buyCoins(5)}>
-                    BUY
+                  <button className="btn btn-success" onClick={() => this.buyCoins(0.1)}>
+                    BUY for 0.1 BNB
                   </button>
                 </div>
 
                 <div 
-                  className="col-lg-4 col-md-12 p-4 monedas"
+                  className="col-lg-3 col-md-12 p-4 monedas"
                   
                 >
-                  <h2 className=" pb-4">10 SBNB</h2>
+                  <h2 className=" pb-4">PROFESIONAL</h2>
                   <img
                     className=" pb-4"
                     src="assets/img/03.png"
                     width="100%"
                     alt=""
                   />
-                  <button className="btn btn-success" onClick={() => this.buyCoins(10)}>
-                    BUY
+                  <button className="btn btn-success" onClick={() => this.buyCoins(1)}>
+                    BUY for 1 BNB
                   </button>
                   
                 </div>

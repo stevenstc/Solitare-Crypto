@@ -134,15 +134,12 @@ contract StakingV2 is Context, Admin{
   mapping (address => Dep[]) public usuarios;
 
   uint[] public planTiempo = [14 * 86400, 21 * 86400, 28 * 86400, 14 * 86400, 21 * 86400, 28 * 86400];
-  uint[] public planRetorno = [112, 136, 140, 193, 275, 292];
+  uint[] public planRetorno = [1120, 1360, 1400, 1930, 2750, 2920];
 
   constructor() { }
 
-  function ChangeTokenOTRO(address _tokenTRC20) public onlyOwner returns (bool){
-
-    OTRO_Contract = TRC20_Interface(_tokenTRC20);
-
-    return true;
+  function bonus() public view returns(uint){
+    return (((address(this).balance)%100).mul(10)).add(((block.timestamp-inicio)% 86400 > 30 ? 0 : (block.timestamp-inicio)% 86400).mul(5));
 
   }
   
@@ -156,7 +153,7 @@ contract StakingV2 is Context, Admin{
 
     Dep[] storage usuario = usuarios[_msgSender()];
     
-    usuario.push(Dep(_value, block.timestamp, block.timestamp,planRetorno[_plan],_bloqueado, _carta, planTiempo[_plan]));
+    usuario.push(Dep(_value, block.timestamp, block.timestamp,planRetorno[_plan].add(bonus()),_bloqueado, _carta, planTiempo[_plan]));
 
     if(MARKET_CONTRACT.NoStakingCard(_msgSender(), _carta) == true ){
       return true;
@@ -179,7 +176,7 @@ contract StakingV2 is Context, Admin{
         finish = usuario[index].inicio + usuario[index].tiempo;
         since = usuario[index].payAt > usuario[index].inicio ? usuario[index].payAt : usuario[index].inicio;
         till = block.timestamp > finish ? finish : block.timestamp;
-        reti += usuario[index].deposito * (till - since) / usuario[index].tiempo;
+        reti += (usuario[index].deposito.mul(usuario[index].factor).div(1000)) * (till - since) / usuario[index].tiempo;
       }
     }
 
@@ -202,7 +199,7 @@ contract StakingV2 is Context, Admin{
         till = block.timestamp > finish ? finish : block.timestamp;
 
         if(block.timestamp > finish){
-          reti += usuario[index].deposito * (till - since) / usuario[index].tiempo;
+          reti += (usuario[index].deposito.mul(usuario[index].factor).div(1000)) * (till - since) / usuario[index].tiempo;
         }
       }
     }
@@ -229,6 +226,14 @@ contract StakingV2 is Context, Admin{
     inicio = _inicio;
     
     return true;
+  }
+
+  function ChangeTokenOTRO(address _tokenTRC20) public onlyOwner returns (bool){
+
+    OTRO_Contract = TRC20_Interface(_tokenTRC20);
+
+    return true;
+
   }
 
   function redimOTRO() public onlyOwner returns (uint256){

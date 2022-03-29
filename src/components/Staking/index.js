@@ -125,14 +125,28 @@ export default class HomeStaking extends Component {
   render() {
     return (
       <>
+      <img
+        className=" pb-4"
+        src="images/banner.png"
+        width="100%"
+        alt=""
+      />
         <header className="masthead text-center text-white">
           <div className="masthead-content">
             <div className="container px-5">
 
               <div className="row">
                 <div className="col-md-12">
-                  <h1>CARD FOR STAKING</h1>
-                  <button type="button" className="btn btn-danger" data-toggle="modal" data-target="#EjemploModal">select a card</button>
+                  <h1>SELECT YOUR CARD FOR STAKING</h1>
+                  <img
+                    className=" pb-4"
+                    src="images/default2.png"
+                    width="100%"
+                    alt=""
+                  />
+                  <button type="button" className="btn btn-danger" data-toggle="modal" data-target="#EjemploModal">SELECT</button> {" or "}
+                  <a href="/?page=market" className="btn btn-success" data-toggle="modal" data-target="#EjemploModal">BUY</a>
+                  
                   <br />
                   <br />
                   <hr />
