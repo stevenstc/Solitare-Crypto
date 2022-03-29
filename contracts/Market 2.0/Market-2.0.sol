@@ -201,13 +201,14 @@ contract MarketV2 is Context, Admin{
       Investor storage usuario = investors[_msgSender()];
 
       if (usuario.baneado)revert("estas baneado");
-      if (_value > usuario.balance)revert();
+      if (_value > usuario.balance)revert("no tienes ese saldo");
+      if (usuario.payAt+TIME_CLAIM > block.timestamp ) revert("no es tiempo de retirar");
 
       if (address(this).balance < _value) revert("no hay balance para transferir");
-      if (payable(_msgSender()).send(_value))
-          revert("fallo la transferencia");
+      if (payable(_msgSender()).send(_value)) revert("fallo la transferencia");
 
       usuario.balance -= _value;
+      usuario.payAt = block.timestamp;
 
       return true;
   }
