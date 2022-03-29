@@ -20,202 +20,6 @@ export default class Home extends Component {
       pais: "country not selected",
       timeWitdrwal: "Loading...",
       botonwit: true,
-      paises:[
-        "please select a country",
-        "Afghanistan",
-        "Albania",
-        "Algeria",
-        "Andorra",
-        "Angola",
-        "Antigua and Barbuda",
-        "Argentina",
-        "Armenia",
-        "Australia",
-        "Austria",
-        "Azerbaijan",
-        "Bahamas",
-        "Bahrain",
-        "Bangladesh",
-        "Barbados",
-        "Belarus",
-        "Belgium",
-        "Belize",
-        "Benin",
-        "Bhutan",
-        "Bolivia",
-        "Bosnia and Herzegovina",
-        "Botswana",
-        "Brazil",
-        "Brunei",
-        "Bulgaria",
-        "Burkina Faso",
-        "Burundi",
-        "Cambodia",
-        "Cameroon",
-        "Canada",
-        "Cape Verde",
-        "Central African Republic",
-        "Chad",
-        "Chile",
-        "China",
-        "Colombia",
-        "Comoros",
-        "Congo (Brazzaville)",
-        "Congo",
-        "Costa Rica",
-        "Cote d'Ivoire",
-        "Croatia",
-        "Cuba",
-        "Cyprus",
-        "Czech Republic",
-        "Denmark",
-        "Djibouti",
-        "Dominica",
-        "Dominican Republic",
-        "East Timor (Timor Timur)",
-        "Ecuador",
-        "Egypt",
-        "El Salvador",
-        "Equatorial Guinea",
-        "Eritrea",
-        "Estonia",
-        "Ethiopia",
-        "Fiji",
-        "Finland",
-        "France",
-        "Gabon",
-        "Gambia, The",
-        "Georgia",
-        "Germany",
-        "Ghana",
-        "Greece",
-        "Grenada",
-        "Guatemala",
-        "Guinea",
-        "Guinea-Bissau",
-        "Guyana",
-        "Haiti",
-        "Honduras",
-        "Hungary",
-        "Iceland",
-        "India",
-        "Indonesia",
-        "Iran",
-        "Iraq",
-        "Ireland",
-        "Israel",
-        "Italy",
-        "Jamaica",
-        "Japan",
-        "Jordan",
-        "Kazakhstan",
-        "Kenya",
-        "Kiribati",
-        "Korea, North",
-        "Korea, South",
-        "Kuwait",
-        "Kyrgyzstan",
-        "Laos",
-        "Latvia",
-        "Lebanon",
-        "Lesotho",
-        "Liberia",
-        "Libya",
-        "Liechtenstein",
-        "Lithuania",
-        "Luxembourg",
-        "Macedonia",
-        "Madagascar",
-        "Malawi",
-        "Malaysia",
-        "Maldives",
-        "Mali",
-        "Malta",
-        "Marshall Islands",
-        "Mauritania",
-        "Mauritius",
-        "Mexico",
-        "Micronesia",
-        "Moldova",
-        "Monaco",
-        "Mongolia",
-        "Morocco",
-        "Mozambique",
-        "Myanmar",
-        "Namibia",
-        "Nauru",
-        "Nepa",
-        "Netherlands",
-        "New Zealand",
-        "Nicaragua",
-        "Niger",
-        "Nigeria",
-        "Norway",
-        "Oman",
-        "Pakistan",
-        "Palau",
-        "Panama",
-        "Papua New Guinea",
-        "Paraguay",
-        "Peru",
-        "Philippines",
-        "Poland",
-        "Portugal",
-        "Qatar",
-        "Romania",
-        "Russia",
-        "Rwanda",
-        "Saint Kitts and Nevis",
-        "Saint Lucia",
-        "Saint Vincent",
-        "Samoa",
-        "San Marino",
-        "Sao Tome and Principe",
-        "Saudi Arabia",
-        "Senegal",
-        "Serbia and Montenegro",
-        "Seychelles",
-        "Sierra Leone",
-        "Singapore",
-        "Slovakia",
-        "Slovenia",
-        "Solomon Islands",
-        "Somalia",
-        "South Africa",
-        "Spain",
-        "Sri Lanka",
-        "Sudan",
-        "Suriname",
-        "Swaziland",
-        "Sweden",
-        "Switzerland",
-        "Syria",
-        "Taiwan",
-        "Tajikistan",
-        "Tanzania",
-        "Thailand",
-        "Togo",
-        "Tonga",
-        "Trinidad and Tobago",
-        "Tunisia",
-        "Turkey",
-        "Turkmenistan",
-        "Tuvalu",
-        "Uganda",
-        "Ukraine",
-        "United Arab Emirates",
-        "United Kingdom",
-        "United States",
-        "Uruguay",
-        "Uzbekistan",
-        "Vanuatu",
-        "Vatican City",
-        "Venezuela",
-        "Vietnam",
-        "Yemen",
-        "Zambia",
-        "Zimbabwe"
-      ],
       imagenLink: "assets/img/default-user-csg.png"
     }
 
@@ -364,7 +168,6 @@ export default class Home extends Component {
     var balance = 0;
     var username = "Please register";
     var emailGame = "email game not set";
-    var pais =  "country not selected";
     var timeWitdrwal = "Loading...";
     var imagenLink = "assets/img/default-user-csg.png";
 
@@ -380,9 +183,6 @@ export default class Home extends Component {
       imagenLink = await imagenLink.text();
 
       document.getElementById("username").innerHTML = username;
-
-      pais = await fetch(cons.API+"api/v1/user/pais/"+this.props.currentAccount);
-      pais = await pais.text();
 
       balance = await fetch(cons.API+"api/v1/coins/"+this.props.currentAccount)
       balance = await balance.text();
@@ -404,17 +204,12 @@ export default class Home extends Component {
       emailGame = "email game not set";
     }
 
-    if(pais === "false" || pais === "" ){
-      pais = "country not selected";
-    }
-
 
     this.setState({
       balanceGAME: balance,
       username: username,
       register: register,
       emailGame: emailGame,
-      pais: pais,
       timeWitdrwal: new Date(parseInt(timeWitdrwal)).toString(),
       imagenLink: imagenLink
     });
@@ -469,8 +264,8 @@ export default class Home extends Component {
 
         inventario[index] = (
 
-          <div className="col-lg-3 col-md-6 p-1" key={`itemsTeam-${index}`}>
-            <img className="pb-4" src={"assets/img/" + item.nombre + ".png"} width="100%" alt={"team "+item.nombre} />
+          <div className="col-lg-2 col-md-3 p-1" key={`itemsTeam-${index}`}>
+            <img className="pb-4" src={"images/" + item.nombre + ".gif"} width="100%" alt={"team "+item.nombre} />
           </div>
 
         )
@@ -596,20 +391,8 @@ export default class Home extends Component {
 
     if(!this.state.register){
 
-      var options = [];
-
-      for (let index = 1; index < this.state.paises.length; index++) {
-        options[index] = (<option value={this.state.paises[index]} key={"opt"+index}>{this.state.paises[index]}</option>);
-
-      }
-
     botonReg = (<>
 
-    <select name="pais" id="pais">
-      <option value="null" defaultValue>{this.state.paises[0]}</option>
-      {options}
-    </select>
-    <br />
     <button
         className="btn btn-info"
         onClick={async() => {
@@ -634,11 +417,6 @@ export default class Home extends Component {
               return;
             }
 
-            if(document.getElementById("pais").value === "null"){
-              alert("Please select a country");
-              return;
-            }
-            datos.pais = document.getElementById("pais").value;
 
             if( this.state.email === "" || this.state.email === "Please update your email" || this.state.email === "Loading..." || this.state.email === "loading...") {
               datos.email = await prompt("Please enter your email:");
@@ -712,14 +490,14 @@ export default class Home extends Component {
 
               <div className="col-lg-3 col-md-12 p-4 text-center monedas">
                   
-                  <h2 className=" pb-4">BASICA</h2>
+                  <h2 className=" pb-4">BASIC</h2>
                   <img
                     className=" pb-4"
-                    src="assets/img/01.png"
+                    src="images/basic.png"
                     width="100%"
                     alt=""
                   />
-                  <button className="btn btn-success" onClick={() => this.buyCoins(1)}>
+                  <button className="btn btn-success" onClick={() => this.buyCoins(0.025)}>
                     BUY for 0.025 BNB
                   </button>
                 </div>
@@ -729,11 +507,11 @@ export default class Home extends Component {
                   <h2 className=" pb-4">POPULAR</h2>
                   <img
                     className=" pb-4"
-                    src="assets/img/01.png"
+                    src="images/popular.png"
                     width="100%"
                     alt=""
                   />
-                  <button className="btn btn-success" onClick={() => this.buyCoins(1)}>
+                  <button className="btn btn-success" onClick={() => this.buyCoins(0.05)}>
                     BUY for 0.05 BNB
                   </button>
                 </div>
@@ -746,7 +524,7 @@ export default class Home extends Component {
                   <h2 className=" pb-4">PREMIUM</h2>
                   <img
                     className=" pb-4"
-                    src="assets/img/02.png"
+                    src="images/premium.png"
                     width="100%"
                     alt=""
                   />
@@ -759,10 +537,10 @@ export default class Home extends Component {
                   className="col-lg-3 col-md-12 p-4 monedas"
                   
                 >
-                  <h2 className=" pb-4">PROFESIONAL</h2>
+                  <h2 className=" pb-4">PROFESSIONAL</h2>
                   <img
                     className=" pb-4"
-                    src="assets/img/03.png"
+                    src="images/professional.png"
                     width="100%"
                     alt=""
                   />
@@ -781,9 +559,21 @@ export default class Home extends Component {
         <div className="container mt-3 mb-3">
           <div className="row text-center">
             <div className="col-lg-6 col-md-6 ">
+            <img
+                src="images/logo.png"
+                className="meta-gray"
+                width="100"
+                height="100" 
+                alt="markert info"/>
               <h2>Wallet</h2>
+              
               <p>{this.props.currentAccount}</p>
               
+              <span>
+                BNB: {this.state.balance}
+              </span>
+              <br/>
+              <br/>
               <button
                 className="btn btn-success"
                 onClick={() => this.update()}
@@ -891,7 +681,7 @@ this.setState({
 })
 
 this.update();
-}} style={{cursor:"pointer"}}> Username: {this.state.username}</span> | {this.state.pais} | {this.state.emailGame}
+}} style={{cursor:"pointer"}}> Username: {this.state.username}</span> | {this.state.emailGame}
               <br /><br />
 
               {botonReg}
@@ -902,46 +692,8 @@ this.update();
           <hr></hr>
           <div className="row text-center">
           
-            <div className="col-lg-4 col-md-12 mt-2">
-            <img
-                src="images/logo.png"
-                className="meta-gray"
-                width="100"
-                height="100" 
-                alt="markert info"/>
 
-            <h3>IN WALLET</h3>
-              <span>
-                BNB: {this.state.balance}
-              </span>
-              <br/><br/>
-              <input type="number" id="cantidadSbnb" step="0.01" defaultValue="0.01"></input><br /><br />
-              <button
-                className="btn btn-primary"
-                onClick={async() => 
-                { 
-                  
-                  var cantidad = document.getElementById("cantidadSbnb").value;
-
-                  console.log(parseFloat(cantidad))
-
-                  if(parseFloat(cantidad) > 0 ){
-                    await this.buyCoins(cantidad);
-                  }else{
-                    alert("please enter valid amount");
-                  }
-
-                  this.update();
-
-                }}
-              >
-                {" "}
-                Buy SBNB {" -> "}
-              </button>
-
-            </div>
-
-            <div className="col-lg-4 col-md-12  mt-2">
+            <div className="col-lg-6 col-md-12  mt-2">
             <a href="https://bscscan.com/address/0x2846df5d668C1B4017562b7d2C1E471373912509#tokentxns"><img
                 src="images/logo.png"
                 className="meta-gray"
@@ -1011,12 +763,12 @@ this.update();
                   var tx = {};
                   tx.status = false;
 
-                  var cantidad = document.getElementById("cantidadSbnb2").value;
+                  var cantidad = new BigNumber(document.getElementById("cantidadSbnb2").value);
+                  cantidad = cantidad.shiftedBy(18);
 
-                  var gasLimit = await this.props.wallet.contractMarket.methods.gastarCoinsfrom(cantidad+"000000000000000000",  this.props.currentAccount).estimateGas({from: cons.WALLETPAY});
-                  
+                  var gasLimit = await this.props.wallet.contractMarket.methods.gastarCoinsfrom(cantidad.toString(),  this.props.currentAccount).estimateGas({from: cons.WALLETPAY});
                   gasLimit = gasLimit*cons.FACTOR_GAS;
-                  //console.log(gasLimit)
+
 
                   var usuario = await this.props.wallet.contractMarket.methods.investors(this.props.currentAccount).call({from: this.props.currentAccount});
                   var balance = new BigNumber(usuario.balance);
@@ -1024,7 +776,9 @@ this.update();
                   balance = balance.shiftedBy(-18).decimalPlaces(8).toNumber();
                   console.log(balance)
 
-                  if(balance-parseFloat(cantidad) >= 0){
+                  console.log(cantidad)
+
+                  if(balance-cantidad.shiftedBy(-18).toNumber() >= 0){
                     tx = await this.props.wallet.web3.eth.sendTransaction({
                       from: this.props.currentAccount,
                       to: cons.WALLETPAY,
@@ -1059,7 +813,7 @@ this.update();
               </button>
             </div>
 
-            <div className="col-lg-4 col-md-12  mt-2">
+            <div className="col-lg-6 col-md-12  mt-2">
             <img
                 src="images/logo.png"
                 className="meta-gray"
@@ -1176,7 +930,7 @@ this.update();
           
           <div style={{ marginTop: "30px" }} className="row text-center">
             <div className="col-md-12">
-              <h3>IN GAME inventory</h3>{" "}
+              <h3>Inventory</h3>{" "}
               
             </div>
           </div>
@@ -1185,20 +939,7 @@ this.update();
             {this.state.inventario}
           </div>
 
-          <div className="col-lg-12 col-md-12 text-center">
-              <hr></hr>
-            </div>
-
-          <div style={{ marginTop: "30px" }} className="row text-center">
-            <div className="col-md-12">
-              <h3>Account inventory</h3>{" "}
-              
-            </div>
-          </div>
-
-          <div className="row text-center" id="inventory">
-            {this.state.inventario}
-          </div>
+         
 
         </div>
       </>

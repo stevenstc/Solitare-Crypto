@@ -114,9 +114,9 @@ contract Admin is Context, Ownable{
 contract StakingV2 is Context, Admin{
   using SafeMath for uint;
 
-  Market_Interface MARKET_CONTRACT = Market_Interface(0x389ccc30de1d311738Dffd3F60D4fD6188970F45);
+  Market_Interface MARKET_CONTRACT = Market_Interface(0xD70e4ec3A81231b63BC2CD16D2Bd6Acc4614d505);
 
-  TRC20_Interface OTRO_Contract = TRC20_Interface(0x389ccc30de1d311738Dffd3F60D4fD6188970F45);
+  TRC20_Interface OTRO_Contract = TRC20_Interface(0xD70e4ec3A81231b63BC2CD16D2Bd6Acc4614d505);
 
   struct Dep {
     uint deposito;

@@ -39,104 +39,43 @@ export default class Market extends Component {
   }
 
   async balance() {
-    var balance =
-      await this.props.wallet.contractToken.methods
-        .balanceOf(this.props.currentAccount)
-        .call({ from: this.props.currentAccount });
+    var balance = await this.props.wallet.web3.eth.getBalance(this.props.currentAccount);
 
     balance = new BigNumber(balance);
     balance = balance.shiftedBy(-18);
     balance = balance.decimalPlaces(6)
     balance = balance.toString();
 
-    //console.log(balance)
-
     this.setState({
-      balance: balance
+      balance: balance+" BNB"
     });
   }
 
 
   async buyItem(id){
 
-    var aprovado = await this.props.wallet.contractToken.methods
-      .allowance(this.props.currentAccount, this.props.wallet.contractMarket._address)
-      .call({ from: this.props.currentAccount });
-
-    aprovado = new BigNumber(aprovado);
-    aprovado = aprovado.shiftedBy(-18);
-    aprovado = aprovado.decimalPlaces(2).toNumber();
-
-    /*
-
-    var balance = await this.props.wallet.contractToken.methods
-    .balanceOf(this.props.currentAccount)
+    var item =  await this.props.wallet.contractMarket.methods
+    .items(id)
     .call({ from: this.props.currentAccount });
+  
+    var result = await this.props.wallet.contractMarket.methods
+      .buyItem(id, "0x0000000000000000000000000000000000000000")
+      .send({value: item.valor, from: this.props.currentAccount });
 
-    balance = new BigNumber(balance);
-    balance = balance.shiftedBy(-18);
-    balance = balance.decimalPlaces(0).toNumber();
-    */
-
-    console.log(aprovado);
-
-    if(aprovado > 0){
-
-        var result = await this.props.wallet.contractMarket.methods
-          .buyItem(id)
-          .send({ from: this.props.currentAccount });
-
-        if(result){
-          alert("item buy");
-        }
+      console.log(result)
+    if(result.status){
+      alert("item buy");
     }else{
-        alert("insuficient aproved balance")
-      await this.props.wallet.contractToken.methods
-      .approve(this.props.wallet.contractMarket._address, "115792089237316195423570985008687907853269984665640564039457584007913129639935")
-      .send({ from: this.props.currentAccount });
-      }
-
-
-    this.update();
-
-  }
-
-  async buyCoins(amount){
-
-    var balance = await this.props.wallet.contractToken.methods
-    .balanceOf(this.props.currentAccount)
-    .call({ from: this.props.currentAccount });
-
-    balance = new BigNumber(balance);
-    balance = balance.shiftedBy(-18);
-    balance = balance.decimalPlaces(8).toNumber();
-
-    var compra;
-
-    if(amount === 1)compra = "1000000000000000000";
-    if(amount === 5)compra = "5000000000000000000";
-    if(amount === 10)compra = "10000000000000000000";
-
-    amount = new BigNumber(amount);
-    amount = amount.decimalPlaces(8).toNumber();
-
-    if (balance>=amount) {
-
-      var result = await this.props.wallet.contractMarket.methods
-      .buyCoins(compra)
-      .send({ from: this.props.currentAccount });
-
-      if(result){
-        alert("coins buyed");
-      }
-      
-    }else{
-      alert("insuficient founds")
+      alert("fail");
     }
+    
+
 
     this.update();
 
   }
+
+ 
 
   async items() {
     if(!this.state.loading){
@@ -149,50 +88,28 @@ export default class Market extends Component {
 
       var result = await this.props.wallet.contractMarket.methods.largoItems().call({ from: this.props.currentAccount });
         //console.log(result)
-        //{filter:"grayscale(100%)"}
 
       for (let index = 0; index < result; index++) {
 
         var item = await this.props.wallet.contractMarket.methods.items(index).call({ from: this.props.currentAccount });
-        if(item.ilimitado || parseInt(item.cantidad) > 0){
-          var eliminated = {};
-        }else{
-          eliminated = {filter:"grayscale(100%)"};
-        }
+        
         listItems[index]= item;
         //console.log(item)
         itemsYoutube[index] = (
             <div className="col-lg-3 col-md-6 p-3 mb-5 text-center monedas position-relative" key={`items-${index}`}>
-              <h2 className=" pb-2"> Item #{index+1}</h2>
+              <h2 className=" pb-2"> <span role="img" aria-labelledby="rombo">♦️</span> {item.nombre}</h2>
+              <button type="button" className="btn btn-success" onClick={() => this.buyItem(index)}>
+                {item.valor/10**18} BNB
+              </button>
               <img
                 className=" pb-2"
-                src={"assets/img/" + item.nombre + ".png"}
-                style={eliminated} 
+                src={"images/default.png"}
                 width="100%"
                 alt=""
               />
 
-              <h2 className="centradoFan">
-                <b></b>
-              </h2>
 
-              <h2 className=" pb-2">{item.tipo}</h2>
-              
-              <div
-                className="position-relative btn-monedas"
-                onClick={() => {
-                  if(listItems[index].ilimitado || parseInt(listItems[index].cantidad) > 0){
-                    this.buyItem(index);
-                  }else{
-                    alert("Sold Out")
-                  }
-                  
-                }}
-              >
-                <span className="position-absolute top-50 end-0 translate-middle-y p-5" >
-                  {item.valor/10**18}
-                </span>
-              </div>
+             
             </div>
         );
 

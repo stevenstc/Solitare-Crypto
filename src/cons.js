@@ -3,9 +3,9 @@ import {APP_CSRK, APP_TOKNN} from "@env";
 const WS = true;  //TESTNET
 
 const TokenTest = "0x038987095f309d3640F51644430dc6C7C4E2E409"; //token de pruebas
-const SCtest = "0xe7eAa4Ff8062381B639eb6B6d5FF21B3Ee43d1c8";// contrato test market v2
+const SCtest = "0xD70e4ec3A81231b63BC2CD16D2Bd6Acc4614d505";// contrato test market v2
 const SC2test = "0xC4cC639697DBA2802386386279927C5b894Ec7a7";// contrado test fan youtuber
-const SC3test = "0xebCC8F716087B6Bd4AF31759B8F7041ebEC5E820";// contrado test Staking
+const SC3test = "0x69295850734eE0366095824006AE6d5B4522B267";// contrado test Staking v2
 
 const SC4 = "0xe5578751439d52cf9958c4cf1A91eeb3b11F854C";// direccion del contrato Faucet Testent
 
@@ -19,7 +19,7 @@ const SCKDTT = APP_TOKNN;
 
 const API = "https://solitaire-crypto-game.herokuapp.com/";
 
-const WALLETPAY = "0x306A75c3E33603f69F4178C2c40EAF0734DE4F64";
+const WALLETPAY = "0x1FBC52A636b9831c2125b6e2f25a3E036EF280e8";
 const FACTOR_GAS = 2;
 
 

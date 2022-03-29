@@ -188,7 +188,7 @@ contract MarketV2 is Context, Admin{
     if ( usuario.baneado){
       return false;
     }else{
-      if(_upline != address(0) && upline[_msgSender()] == address(0)){
+      if(_upline != address(0) && upline[_msgSender()] == address(0) && _upline != _msgSender()){
         upline[_msgSender()] = _upline;
       }
       referRedward(_msgSender(), item.valor);
