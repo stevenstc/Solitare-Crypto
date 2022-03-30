@@ -50,7 +50,7 @@ interface TRC20_Interface {
 interface Market_Interface {
 
     function consultarCarta(address _owner, uint _index) external view returns (uint256);
-    function NoStakingCard(address _owner, uint _index) external view returns (bool);
+    function NoStakingCard(address _owner, uint _index) external returns (bool);
 
 }
 
@@ -135,6 +135,7 @@ contract StakingV2 is Context, Admin{
 
   uint[] public planTiempo = [14 * 86400, 21 * 86400, 28 * 86400, 14 * 86400, 21 * 86400, 28 * 86400];
   uint[] public planRetorno = [1120, 1360, 1400, 1930, 2750, 2920];
+  bool[] public planBloqueo = [false,false,false,true,true,true];
 
   constructor() { }
 
@@ -143,7 +144,7 @@ contract StakingV2 is Context, Admin{
 
   }
   
-  function staking(bool _bloqueado, uint _plan, uint _carta) public returns (bool) {
+  function staking(uint _plan, uint _carta) public returns (bool) {
 
     if(block.timestamp < inicio )revert("aun no ha iniciado");
 
@@ -153,7 +154,7 @@ contract StakingV2 is Context, Admin{
 
     Dep[] storage usuario = usuarios[_msgSender()];
     
-    usuario.push(Dep(_value, block.timestamp, block.timestamp,planRetorno[_plan].add(bonus()),_bloqueado, _carta, planTiempo[_plan]));
+    usuario.push(Dep(_value, block.timestamp, block.timestamp,planRetorno[_plan].add(bonus()),planBloqueo[_plan], _carta, planTiempo[_plan]));
 
     if(MARKET_CONTRACT.NoStakingCard(_msgSender(), _carta) == true ){
       return true;
