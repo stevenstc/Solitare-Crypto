@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+const BigNumber = require('bignumber.js');
 
 export default class HomeStaking extends Component {
   constructor(props) {
@@ -8,7 +9,9 @@ export default class HomeStaking extends Component {
       myInventario: [],
       itemsYoutube: [],
       cardImage: "images/default2.png",
-      card: "default"
+      card: "default",
+      retirableBlock: 0,
+      retirable: 0
     };
 
     this.staking = this.staking.bind(this);
@@ -19,11 +22,12 @@ export default class HomeStaking extends Component {
   }
 
   async componentDidMount() {
+ 
     setInterval(() => {
-
       this.myStake();
-    }, 3 * 1000);
-
+      this.inventario();
+    }, 15*1000);
+    this.myStake();
     this.inventario();
   }
 
@@ -42,24 +46,39 @@ export default class HomeStaking extends Component {
         this.props.wallet.contractStaking.methods
         .staking( plan, carta)
         .send({ from: this.props.currentAccount })
-        .then(()=>{alert("staking started")})
-        .catch(()=>{alert("staking failed")})
+        .then(()=>{alert("staking started"); this.myStake(); this.inventario();})
+        .catch(()=>{alert("staking failed"); this.myStake(); this.inventario();})
+
+        
       }else{
         alert("It's not time");
       }
     }else{
       alert("please select a card")
     }
-        
-      
 
   }
 
   async myStake() {
 
+    var retirable = await this.props.wallet.contractStaking.methods
+        .retirable(this.props.currentAccount)
+        .call({ from: this.props.currentAccount });
+
+    retirable = new BigNumber(retirable).shiftedBy(-18).decimalPlaces(6).toString();
+
+    var retirableBlock = await this.props.wallet.contractStaking.methods
+    .retirableBlock(this.props.currentAccount)
+    .call({ from: this.props.currentAccount });
+
+    retirableBlock = new BigNumber(retirableBlock).shiftedBy(-18).decimalPlaces(6).toString();
+
+    
     this.setState({
-      staked: 0,
-      claim: 0
+      cardImage: "images/default2.png",
+      card: "default",
+      retirable: retirable,
+      retirableBlock: retirableBlock
     }) 
     
   }
@@ -124,6 +143,10 @@ export default class HomeStaking extends Component {
               <div className="row">
                 <div className="col-md-12">
                   <h1>YOUR CARD FOR STAKING</h1>
+
+                </div>
+
+                <div className="col-md-6">
                   <img
                     className=" pb-4"
                     src={this.state.cardImage}
@@ -133,11 +156,26 @@ export default class HomeStaking extends Component {
                   <button type="button" className="btn btn-danger" data-toggle="modal" data-target="#EjemploModal">SELECT</button> {" or "}
                   <a href="/?page=market" className="btn btn-success" data-toggle="modal" data-target="#EjemploModal">BUY</a>
                   
-                  
-                  <hr />
                 </div>
-                
-                
+
+                <div className="col-md-6">
+                  <br />
+
+                  <h3>Flexible Balance: {this.state.retirable} BNB</h3>
+                  <br />
+                  <a href="/?page=market" className="btn btn-warning">Withdraw flexible</a>
+                  <br />
+                  <br />
+                  <h3>Loked Balance: {this.state.retirableBlock} BNB</h3>
+                  <br />
+                  <a href="/?page=market" className="btn btn-warning">Withdraw locked</a>
+
+                  
+                </div>
+
+                <div className="col-md-12">
+                <hr />
+                </div>
                 
                 <div className="col-md-12">
                   <h2>Flexible</h2>

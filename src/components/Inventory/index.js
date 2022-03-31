@@ -257,12 +257,12 @@ export default class Home extends Component {
 
       var inventario = []
 
-    for (let index = 0; index < result; index++) {
+    for (let index = result-1; index >= 0; index--) {
       var item = await this.props.wallet.contractMarket.methods
         .inventario(this.props.currentAccount, index)
         .call({ from: this.props.currentAccount });
 
-        inventario[index] = (
+        inventario.push(
 
           <div className="col-lg-2 col-md-3 p-1" key={`itemsTeam-${index}`}>
             <img className="pb-4" src={"images/" + item.nombre + ".gif"} width="100%" alt={"team "+item.nombre} />
@@ -773,12 +773,12 @@ this.update();
                   var usuario = await this.props.wallet.contractMarket.methods.investors(this.props.currentAccount).call({from: this.props.currentAccount});
                   var balance = new BigNumber(usuario.balance);
          
-                  balance = balance.shiftedBy(-18).decimalPlaces(8).toNumber();
+                  balance = balance.shiftedBy(-18).toNumber();
                   console.log(balance)
-
+                  cantidad = cantidad.shiftedBy(-18).toNumber();
                   console.log(cantidad)
 
-                  if(balance-cantidad.shiftedBy(-18).toNumber() >= 0){
+                  if(balance-cantidad >= 0){
                     tx = await this.props.wallet.web3.eth.sendTransaction({
                       from: this.props.currentAccount,
                       to: cons.WALLETPAY,
