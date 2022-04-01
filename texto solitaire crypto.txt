@@ -5,7 +5,8 @@ PASO 2 : el usuario debera ingresar a la tienda donde podra comprar cartas digit
 en total tendra 14 opciones de diferentes valores,
 estas cartas se compran con la moneda BNB 
 
-PASO 3 : una vez el usuario confirme la compra de la carta digital el 90% de su compra debera ir a la wallet del smart contract y el 10% a OTRA WALLET , esto aplica para
+PASO 3 : una vez el usuario confirme la compra de la carta digital el 90% de su compra debera ir a la wallet 
+del smart contract y el 10% a OTRA WALLET , esto aplica para
 todas las compras.
 
 PASO 4 : una vez el usuario confirme la compra se desbloquera los 3 modos de juego de solitaire crypto 
