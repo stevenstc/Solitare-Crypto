@@ -584,8 +584,7 @@ export default class Home extends Component {
 
             <div className="col-lg-6 col-md-6">
 
-            <h2>GAME data</h2>
-
+            
             <img
                 src={this.state.imagenLink}
                 className="meta-gray"
@@ -631,9 +630,8 @@ export default class Home extends Component {
 
                   this.update()
                 }}
-                />
-
-                <br></br>
+            />
+            <h2>GAME data</h2>
 
             <span id="username" onClick={async() => {
 
