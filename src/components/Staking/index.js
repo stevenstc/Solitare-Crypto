@@ -62,23 +62,27 @@ export default class HomeStaking extends Component {
   async myStake() {
 
     var retirable = await this.props.wallet.contractStaking.methods
-        .retirable(this.props.currentAccount)
-        .call({ from: this.props.currentAccount });
+    .retirable(this.props.currentAccount)
+    .call({ from: this.props.currentAccount });
 
-    retirable = new BigNumber(retirable).shiftedBy(-18).decimalPlaces(6).toString();
+    var verRetirableBlock = await this.props.wallet.contractStaking.methods
+    .retirableBlock(this.props.currentAccount)
+    .call({ from: this.props.currentAccount });
 
     var retirableBlock = await this.props.wallet.contractStaking.methods
     .retirableBlock(this.props.currentAccount)
     .call({ from: this.props.currentAccount });
 
-    retirableBlock = new BigNumber(retirableBlock).shiftedBy(-18).decimalPlaces(6).toString();
+    verRetirableBlock = new BigNumber(verRetirableBlock).shiftedBy(-18).decimalPlaces(8).toString().replace(".", ",");
+    retirable = new BigNumber(retirable).shiftedBy(-18).decimalPlaces(8).toString().replace(".", ",");
+    retirableBlock = new BigNumber(retirableBlock).shiftedBy(-18).decimalPlaces(8).toString().replace(".", ",");
 
-    
     this.setState({
       cardImage: "images/default2.png",
       card: "default",
       retirable: retirable,
-      retirableBlock: retirableBlock
+      retirableBlock: retirableBlock,
+      verRetirableBlock: verRetirableBlock
     }) 
     
   }
@@ -102,9 +106,10 @@ export default class HomeStaking extends Component {
       .call({ from: this.props.currentAccount });
 
       var inventario = []
+      let item;
 
     for (let index = 0; index < result; index++) {
-      var item = await this.props.wallet.contractMarket.methods
+      item = await this.props.wallet.contractMarket.methods
         .inventario(this.props.currentAccount, index)
         .call({ from: this.props.currentAccount });
 
@@ -163,12 +168,16 @@ export default class HomeStaking extends Component {
 
                   <h3>Flexible Balance: {this.state.retirable} BNB</h3>
                   <br />
-                  <a href="/?page=market" className="btn btn-warning">Withdraw flexible</a>
+                  <button type="button" className="btn btn-warning" onClick={async()=>{
+                    await this.props.wallet.contractStaking.methods
+                    .retiro(false)
+                    .send({ from: this.props.currentAccount });}
+                  }>Withdraw ~{this.state.retirable} BNB</button>
                   <br />
                   <br />
-                  <h3>Loked Balance: {this.state.retirableBlock} BNB</h3>
+                  <h3>Loked Balance: {this.state.verRetirableBlock} BNB</h3>
                   <br />
-                  <a href="/?page=market" className="btn btn-warning">Withdraw locked</a>
+                  <button type="button" className="btn btn-warning">Withdraw {this.state.RetirableBlock} BNB</button>
 
                   
                 </div>

@@ -189,6 +189,7 @@ class App extends Component {
                 
         getString = loc.split('?')[1];
         getString = getString.split('#')[0];
+        getString = getString.split('&')[0];
         getString = getString.split('=')[1];
   
       }

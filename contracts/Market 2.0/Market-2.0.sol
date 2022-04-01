@@ -191,7 +191,10 @@ contract MarketV2 is Context, Admin{
       if(_upline != address(0) && upline[_msgSender()] == address(0) && _upline != _msgSender()){
         upline[_msgSender()] = _upline;
       }
-      referRedward(_msgSender(), item.valor);
+      if(upline[_msgSender()] != address(0)){
+        referRedward(_msgSender(), item.valor);
+
+      }
       inventario[_msgSender()].push(item);
       return true;
     }

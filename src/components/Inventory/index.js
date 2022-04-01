@@ -58,8 +58,7 @@ export default class Home extends Component {
     var balance = await this.props.wallet.web3.eth.getBalance(this.props.currentAccount);
 
     balance = new BigNumber(balance);
-    balance = balance.shiftedBy(-18).decimalPlaces(8);
-    balance = balance.toString();
+    balance = balance.shiftedBy(-18).decimalPlaces(4).toString().replace(".", ",");
 
     //console.log(balance)
 
@@ -154,7 +153,7 @@ export default class Home extends Component {
 
     var balance = new BigNumber(investor.balance);
 
-    balance = balance.shiftedBy(-18).decimalPlaces(6).toString();
+    balance = balance.shiftedBy(-18).decimalPlaces(4).toString().replace(".", ",");
 
     //console.log(balance)
 
@@ -224,11 +223,11 @@ export default class Home extends Component {
     balance = balance.decimalPlaces(8).toNumber();
 
     amount = new BigNumber(amount);
-    var compra = amount.shiftedBy(18).decimalPlaces(0);
+    var compra = amount.shiftedBy(18).decimalPlaces(8);
   
     amount = amount.decimalPlaces(8).toNumber();
 
-    if (balance>=amount) {
+    if (balance>=amount && amount > 0 && balance > 0 ) {
 
       var result = await this.props.wallet.contractMarket.methods
       .buyCoins()
@@ -498,7 +497,7 @@ export default class Home extends Component {
                     alt=""
                   />
                   <button className="btn btn-success" onClick={() => this.buyCoins(0.025)}>
-                    BUY for 0.025 BNB
+                    BUY for 0,025 BNB
                   </button>
                 </div>
 
@@ -512,7 +511,7 @@ export default class Home extends Component {
                     alt=""
                   />
                   <button className="btn btn-success" onClick={() => this.buyCoins(0.05)}>
-                    BUY for 0.05 BNB
+                    BUY for 0,05 BNB
                   </button>
                 </div>
 
@@ -529,7 +528,7 @@ export default class Home extends Component {
                     alt=""
                   />
                   <button className="btn btn-success" onClick={() => this.buyCoins(0.1)}>
-                    BUY for 0.1 BNB
+                    BUY for 0,1 BNB
                   </button>
                 </div>
 

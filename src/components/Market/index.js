@@ -12,8 +12,9 @@ export default class Market extends Component {
         <div className="col-lg-12 p-3 mb-5 text-center monedas position-relative" key={`items-0`}>
           <h2 className=" pb-2">Loading... please wait</h2>
         </div>
-    )],
-      balance: "Loading..."
+      )],
+      balance: "Loading...",
+      referLink: "Loading..."
     }
 
     this.balance = this.balance.bind(this);
@@ -47,19 +48,36 @@ export default class Market extends Component {
     balance = balance.toString();
 
     this.setState({
-      balance: balance+" BNB"
+      balance: balance+" BNB",
+      referLink: window.location.origin+"/?page=market&wallet="+this.props.currentAccount
     });
   }
 
 
   async buyItem(id){
 
+    var wallet = "0x0000000000000000000000000000000000000000";
+
+    var getString = "";
+    var loc = document.location.href;
+
+    if(loc.indexOf('?')>0){
+                
+      getString = loc.split('?')[1];
+      getString = getString.split('#')[0];
+      getString = getString.split('&')[1];
+      getString = getString.split('=')[1];
+      wallet = getString;
+    }
+
+    console.log(wallet)
+
     var item =  await this.props.wallet.contractMarket.methods
     .items(id)
     .call({ from: this.props.currentAccount });
   
     var result = await this.props.wallet.contractMarket.methods
-      .buyItem(id, "0x0000000000000000000000000000000000000000")
+      .buyItem(id, wallet)
       .send({value: item.valor, from: this.props.currentAccount });
 
       console.log(result)
@@ -153,6 +171,16 @@ export default class Market extends Component {
     })
   }
 
+  copyToClipBoard() {
+
+    var content = document.getElementById('textArea');
+    
+    content.select();
+    document.execCommand('copy');
+
+    alert("Copied!");
+}
+
   render() {
     return (
       <><header className="masthead text-center text-white">
@@ -160,7 +188,14 @@ export default class Market extends Component {
         <div className="container px-5">
         <div className="row">
             <div className="col-lg-12 col-md-12 p-4 text-center bg-secondary bg-gradient">
-              <h2 className=" pb-4">BNB available:</h2><br></br>
+              <h2>Refer link: </h2>
+              <div className="input-group mb-3">
+                <input type="text" className="form-control" id="textArea" onClick={()=>{this.copyToClipBoard()}} value={this.state.referLink} readOnly />
+                <div className="input-group-append">
+                  <button className="btn btn-outline-danger" type="button" onClick={()=>{this.copyToClipBoard()}}>Copy</button>
+                </div>
+              </div>
+              <h2 className=" pb-4">BNB available:</h2>
               <h3 className=" pb-4">{this.state.balance}</h3>
             </div>
 
