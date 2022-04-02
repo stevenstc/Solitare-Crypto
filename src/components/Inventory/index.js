@@ -264,7 +264,7 @@ export default class Home extends Component {
         inventario.push(
 
           <div className="col-lg-2 col-md-3 p-1" key={`itemsTeam-${index}`}>
-            <img className="pb-4" src={"images/" + item.nombre + ".gif"} width="100%" alt={"team "+item.nombre} />
+            <img className="pb-4" src={"images/" + item.nombre + ".gif"} width="250px" alt={"team "+item.nombre} />
           </div>
 
         )

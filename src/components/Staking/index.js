@@ -47,7 +47,10 @@ export default class HomeStaking extends Component {
         .staking( plan, carta)
         .send({ from: this.props.currentAccount })
         .then(()=>{alert("staking started"); this.myStake(); this.inventario();})
-        .catch(()=>{alert("staking failed"); this.myStake(); this.inventario();})
+        .catch((error)=>{
+          console.log(error);
+          alert("staking failed"); 
+          this.myStake(); this.inventario();})
 
         
       }else{
@@ -66,16 +69,20 @@ export default class HomeStaking extends Component {
     .call({ from: this.props.currentAccount });
 
     var verRetirableBlock = await this.props.wallet.contractStaking.methods
-    .retirableBlock(this.props.currentAccount)
+    .retirableBlock(this.props.currentAccount, true)
     .call({ from: this.props.currentAccount });
 
     var retirableBlock = await this.props.wallet.contractStaking.methods
-    .retirableBlock(this.props.currentAccount)
+    .retirableBlock(this.props.currentAccount, false)
     .call({ from: this.props.currentAccount });
+
+    console.log(retirableBlock)
 
     verRetirableBlock = new BigNumber(verRetirableBlock).shiftedBy(-18).decimalPlaces(8).toString().replace(".", ",");
     retirable = new BigNumber(retirable).shiftedBy(-18).decimalPlaces(8).toString().replace(".", ",");
     retirableBlock = new BigNumber(retirableBlock).shiftedBy(-18).decimalPlaces(8).toString().replace(".", ",");
+
+    console.log(retirableBlock)
 
     this.setState({
       cardImage: "images/default2.png",
@@ -159,7 +166,7 @@ export default class HomeStaking extends Component {
                     alt="card solitaire crypto"
                   />
                   <button type="button" className="btn btn-danger" data-toggle="modal" data-target="#EjemploModal">SELECT</button> {" or "}
-                  <a href="/?page=market" className="btn btn-success" data-toggle="modal" data-target="#EjemploModal">BUY</a>
+                  <a href="/?page=market" className="btn btn-success" >BUY</a>
                   
                 </div>
 
@@ -177,7 +184,7 @@ export default class HomeStaking extends Component {
                   <br />
                   <h3>Loked Balance: {this.state.verRetirableBlock} BNB</h3>
                   <br />
-                  <button type="button" className="btn btn-warning">Withdraw {this.state.RetirableBlock} BNB</button>
+                  <button type="button" className="btn btn-warning">Withdraw {this.state.retirableBlock} BNB</button>
 
                   
                 </div>

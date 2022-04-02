@@ -65,9 +65,12 @@ export default class Market extends Component {
                 
       getString = loc.split('?')[1];
       getString = getString.split('#')[0];
-      getString = getString.split('&')[1];
-      getString = getString.split('=')[1];
-      wallet = getString;
+      getString = getString.split('&');
+      if(getString.length > 1){
+        getString = getString.split('=')[1];
+        wallet = getString;
+      }
+      
     }
 
     console.log(wallet)
