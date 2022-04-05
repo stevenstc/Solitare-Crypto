@@ -236,23 +236,23 @@ export default class HomeStaking extends Component {
 
 
         <div className="modal fade" id="EjemploModal" tabIndex="-1" role="dialog" aria-labelledby="EjemploModalLabel" aria-hidden="true">
-    <div className="modal-dialog" role="document">
-        <div className="modal-content bg-dark">
-            <div className="modal-header">
-            <h5 className="modal-title text-ligth align-center" id="EjemploModalLabel">Please Select One Card</h5>
-            <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-            <div className="modal-body ">
-              <div className="container">
-                <div className="row">
-                  {this.state.inventario}
+            <div className="modal-dialog" role="document">
+                <div className="modal-content bg-dark">
+                    <div className="modal-header">
+                    <h5 className="modal-title text-ligth align-center" id="EjemploModalLabel">Please Select One Card</h5>
+                    <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                    <div className="modal-body ">
+                      <div className="container">
+                        <div className="row">
+                          {this.state.inventario}
+                        </div>
+                      </div>
+                    </div>
+                    
                 </div>
-              </div>
             </div>
-            
         </div>
-    </div>
-</div>
       </>
     );
   }

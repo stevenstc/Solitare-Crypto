@@ -14,7 +14,8 @@ export default class Market extends Component {
         </div>
       )],
       balance: "Loading...",
-      referLink: "Loading..."
+      referLink: "Loading...",
+      repVideo: "video/card-1.mp4",
     }
 
     this.balance = this.balance.bind(this);
@@ -67,7 +68,7 @@ export default class Market extends Component {
       getString = getString.split('#')[0];
       getString = getString.split('&');
       if(getString.length > 1){
-        getString = getString.split('=')[1];
+        getString = getString[1].split('=')[1];
         wallet = getString;
       }
       
@@ -119,7 +120,15 @@ export default class Market extends Component {
         itemsYoutube[index] = (
             <div className="col-lg-3 col-md-6 p-3 mb-5 text-center monedas position-relative" key={`items-${index}`}>
               <h2 className=" pb-2"> <span role="img" aria-labelledby="rombo">♦️</span> {item.nombre}</h2>
-              <button type="button" className="btn btn-success" onClick={() => this.buyItem(index)}>
+              <button type="button" className="btn btn-success" data-toggle="modal" data-target="#modalVideo" onClick={async() => {
+                this.buyItem(index);
+                await this.setState({
+                  repVideo: "video/card-"+(index+1)+".mp4"
+                })
+
+                var video=document.getElementById('video'); 
+                video.play(); 
+                }}>
                 {item.valor/10**18} BNB
               </button>
               <img
@@ -214,6 +223,24 @@ export default class Market extends Component {
         </div>
       </div>
     </header>
+
+    
+
+    <div className="modal fade bd-example-modal-lg" id="modalVideo" tabIndex="-1" role="dialog" aria-labelledby="EjemploModalLabel" aria-hidden="true">
+            <div className="modal-dialog modal-lg" role="document">
+                <div className="modal-content bg-dark">
+                    <div className="modal-header">
+                    <h5 className="modal-title text-ligth align-center" id="EjemploModalLabel">Your card bought</h5>
+                    <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                    <div className="modal-body ">
+                    <video id="video" src={this.state.repVideo} width="100%" >  error #354
+                    </video> 
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
 
       </>
     );
