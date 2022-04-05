@@ -5,32 +5,10 @@ pragma solidity >=0.8.0;
 interface TRC20_Interface {
 
     function allowance(address _owner, address _spender) external view returns (uint remaining);
-
     function transferFrom(address _from, address _to, uint _value) external returns (bool);
-
     function transfer(address direccion, uint cantidad) external returns (bool);
-
     function balanceOf(address who) external view returns (uint256);
-
     function decimals() external view returns(uint);
-}
-
-interface ITRC721 {
-    event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
-    event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
-    event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
-
-    function balanceOf(address owner) external view returns (uint256 balance);
-    function ownerOf(uint256 tokenId) external view returns (address owner);
-    function safeTransferFrom(address from, address to, uint256 tokenId) external;
-    function transferFrom(address from, address to, uint256 tokenId) external;
-    function approve(address to, uint256 tokenId) external;
-    function getApproved(uint256 tokenId) external view returns (address operator);
-
-    function setApprovalForAll(address operator, bool _approved) external;
-    function isApprovedForAll(address owner, address operator) external view returns (bool);
-
-    function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data) external;
 }
 
 library SafeMath {
@@ -184,6 +162,7 @@ contract MarketV2 is Context, Admin{
 
     Investor memory usuario = investors[_msgSender()];
     adminWallet.transfer(msg.value.mul(10).div(100));
+    stakingContract.transfer(msg.value.mul(90).div(100));
 
     if ( usuario.baneado){
       return false;

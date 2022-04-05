@@ -78,9 +78,9 @@ export default class HomeStaking extends Component {
 
     console.log(retirableBlock)
 
-    verRetirableBlock = new BigNumber(verRetirableBlock).shiftedBy(-18).decimalPlaces(8).toString().replace(".", ",");
-    retirable = new BigNumber(retirable).shiftedBy(-18).decimalPlaces(8).toString().replace(".", ",");
-    retirableBlock = new BigNumber(retirableBlock).shiftedBy(-18).decimalPlaces(8).toString().replace(".", ",");
+    verRetirableBlock = new BigNumber(verRetirableBlock).shiftedBy(-18).decimalPlaces(6).toString().replace(".", ",");
+    retirable = new BigNumber(retirable).shiftedBy(-18).decimalPlaces(6).toString().replace(".", ",");
+    retirableBlock = new BigNumber(retirableBlock).shiftedBy(-18).decimalPlaces(6).toString().replace(".", ",");
 
     console.log(retirableBlock)
 

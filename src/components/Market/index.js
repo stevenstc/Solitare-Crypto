@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 const BigNumber = require('bignumber.js');
 
+
 export default class Market extends Component {
   constructor(props) {
     super(props);
@@ -86,6 +87,8 @@ export default class Market extends Component {
 
       console.log(result)
     if(result.status){
+      var video=document.getElementById('video'); 
+      video.play(); 
       alert("item buy");
     }else{
       alert("fail");
@@ -97,7 +100,8 @@ export default class Market extends Component {
 
   }
 
- 
+
+
 
   async items() {
     if(!this.state.loading){
@@ -121,13 +125,10 @@ export default class Market extends Component {
             <div className="col-lg-3 col-md-6 p-3 mb-5 text-center monedas position-relative" key={`items-${index}`}>
               <h2 className=" pb-2"> <span role="img" aria-labelledby="rombo">♦️</span> {item.nombre}</h2>
               <button type="button" className="btn btn-success" data-toggle="modal" data-target="#modalVideo" onClick={async() => {
-                this.buyItem(index);
                 await this.setState({
                   repVideo: "video/card-"+(index+1)+".mp4"
                 })
-
-                var video=document.getElementById('video'); 
-                video.play(); 
+                this.buyItem(index);
                 }}>
                 {item.valor/10**18} BNB
               </button>
@@ -224,13 +225,11 @@ export default class Market extends Component {
       </div>
     </header>
 
-    
-
-    <div className="modal fade bd-example-modal-lg" id="modalVideo" tabIndex="-1" role="dialog" aria-labelledby="EjemploModalLabel" aria-hidden="true">
+    <div className="modal fade bd-example-modal-lg" id="modalVideo" tabIndex="-1" role="dialog" aria-labelledby="modalVideo" aria-hidden="true">
             <div className="modal-dialog modal-lg" role="document">
                 <div className="modal-content bg-dark">
                     <div className="modal-header">
-                    <h5 className="modal-title text-ligth align-center" id="EjemploModalLabel">Your card bought</h5>
+                    <h5 className="modal-title text-ligth align-center" id="EjemploModalLabel">Your card </h5>
                     <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                     <div className="modal-body ">
@@ -241,6 +240,8 @@ export default class Market extends Component {
                 </div>
             </div>
         </div>
+
+        
 
       </>
     );

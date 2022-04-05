@@ -3,9 +3,9 @@ import {APP_CSRK, APP_TOKNN} from "@env";
 const WS = true;  //TESTNET
 
 const TokenTest = "0x038987095f309d3640F51644430dc6C7C4E2E409"; //token de pruebas
-const SCtest = "0xD70e4ec3A81231b63BC2CD16D2Bd6Acc4614d505";// contrato test market v2
+const SCtest = "0x2ede4D06150A04EaC5B7EE63A291011D3F09C3bd";// contrato test market v2
 const SC2test = "0xC4cC639697DBA2802386386279927C5b894Ec7a7";// contrado test fan youtuber pool apuesta
-const SC3test = "0x15F6bd84e385b636751ED5b48656caC0A18e20CE";// contrado test Staking v2
+const SC3test = "0x202b5C9f3FbFd177cf8BC981E77589ff1Ff175dB";// contrado test Staking v2
 
 const SC4 = "0xe5578751439d52cf9958c4cf1A91eeb3b11F854C";// direccion del contrato Faucet Testent
 

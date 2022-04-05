@@ -134,7 +134,8 @@ contract StakingV2 is Context, Admin{
   mapping (address => uint) public payAt;
   mapping (address => uint) public payAtBlock;
 
-  uint[] public planTiempo = [14 * 86400, 21 * 86400, 28 * 86400, 14 * 86400, 21 * 86400, 28 * 86400];
+  //uint[] public planTiempo = [14 * 86400, 21 * 86400, 28 * 86400, 14 * 86400, 21 * 86400, 28 * 86400];
+  uint[] public planTiempo = [ 900,  900, 900,  900, 900, 900];
   uint[] public planRetorno = [1120, 1360, 1400, 1930, 2750, 2920];
   bool[] public planBloqueo = [false,false,false,true,true,true];
 
@@ -216,17 +217,21 @@ contract StakingV2 is Context, Admin{
 
     if( _value <= 0)revert("no hay nada para retirar");
 
-    if(payable(_msgSender()).send(_value) == true ){
       if(_bloqueado){
-        payAtBlock[_msgSender()] = block.timestamp;
+        if(block.timestamp > payAtBlock[_msgSender()]+1*86400){
+          payable(_msgSender()).transfer(_value);
+          payAtBlock[_msgSender()] = block.timestamp;
+        }
+        
       }else{
-        payAt[_msgSender()] = block.timestamp;
-
+        if(block.timestamp > payAt[_msgSender()]+1*86400){
+          payable(_msgSender()).transfer(_value);
+          payAt[_msgSender()] = block.timestamp;
+        }
       }
+      
       return true ;
-    }else{
-      revert("fallo retiro");
-    }
+   
 
   }
 
