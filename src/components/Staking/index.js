@@ -11,7 +11,8 @@ export default class HomeStaking extends Component {
       cardImage: "images/default2.png",
       card: "default",
       retirableBlock: 0,
-      retirable: 0
+      retirable: 0,
+      bonus: 0
     };
 
     this.staking = this.staking.bind(this);
@@ -88,6 +89,10 @@ export default class HomeStaking extends Component {
     .retirableBlock(this.props.currentAccount, false)
     .call({ from: this.props.currentAccount });
 
+    var bonus = await this.props.wallet.contractStaking.methods
+    .bonus()
+    .call({ from: this.props.currentAccount });
+
     verRetirableBlock = new BigNumber(verRetirableBlock).shiftedBy(-18).decimalPlaces(6).toString().replace(".", ",");
     retirable = new BigNumber(retirable).shiftedBy(-18).decimalPlaces(6).toString().replace(".", ",");
     retirableBlock = new BigNumber(retirableBlock).shiftedBy(-18).decimalPlaces(6).toString().replace(".", ",");
@@ -95,7 +100,8 @@ export default class HomeStaking extends Component {
     this.setState({
       retirable: retirable,
       retirableBlock: retirableBlock,
-      verRetirableBlock: verRetirableBlock
+      verRetirableBlock: verRetirableBlock,
+      bonus: bonus/10
     }) 
     
   }
@@ -200,17 +206,15 @@ export default class HomeStaking extends Component {
                 </div>
                 
                 <div className="col-md-12">
-                  <h2>Flexible</h2>
+                  <h2>Flexible + BONUS({this.state.bonus}%)</h2>
                 </div>
 
-                <div className="col-md-4" onClick={()=>{this.staking(0)}} style={{cursor: "pointer"}}>
-                  <img src="images/plan1.1.png" alt="imagen del plan 1.1"/>
-                </div>
-                <div className="col-md-4" onClick={()=>{this.staking( 1)}} style={{cursor: "pointer"}}>
-                  <img src="images/plan1.2.png" alt="imagen del plan 1.2"/>
-                </div>
-                <div className="col-md-4" onClick={()=>{this.staking( 2)}} style={{cursor: "pointer"}}>
-                  <img src="images/plan1.3.png" alt="imagen del plan 1.3"/>
+                <div className="col-md-12" >
+                  <img src="images/plan1.1.png" alt="imagen del plan 1.1"  onClick={()=>{this.staking(0)}} style={{cursor: "pointer"}}/>
+                
+                  <img src="images/plan1.2.png" alt="imagen del plan 1.2"  onClick={()=>{this.staking(1)}} style={{cursor: "pointer"}}/>
+                
+                  <img src="images/plan1.3.png" alt="imagen del plan 1.3"  onClick={()=>{this.staking(2)}} style={{cursor: "pointer"}}/>
                 </div>
                 
               </div>
@@ -219,17 +223,15 @@ export default class HomeStaking extends Component {
               <div className="row">
                 <div className="col-md-12">
                   <hr></hr>
-                  <h2>Locked</h2>
+                  <h2>Locked + BONUS({this.state.bonus}%)</h2>
                 </div>
 
-                <div className="col-md-4" onClick={()=>{this.staking(3)}} style={{cursor: "pointer"}}>
-                  <img src="images/plan2.1.png" alt="imagen del plan 2.1"/>
-                </div>
-                <div className="col-md-4" onClick={()=>{this.staking(4)}} style={{cursor: "pointer"}}>
-                  <img src="images/plan2.2.png" alt="imagen del plan 2.2"/>
-                </div>
-                <div className="col-md-4" onClick={()=>{this.staking(5)}} style={{cursor: "pointer"}}>
-                  <img src="images/plan2.3.png" alt="imagen del plan 2.3"/>
+                <div className="col-md-12" >
+                  <img src="images/plan2.1.png" alt="imagen del plan 2.1" onClick={()=>{this.staking(3)}} style={{cursor: "pointer"}}/>
+        
+                  <img src="images/plan2.2.png" alt="imagen del plan 2.2" onClick={()=>{this.staking(4)}} style={{cursor: "pointer"}}/>
+ 
+                  <img src="images/plan2.3.png" alt="imagen del plan 2.3" onClick={()=>{this.staking(5)}} style={{cursor: "pointer"}}/>
                 </div>
                 
               </div>
