@@ -89,7 +89,6 @@ export default class Market extends Component {
     if(result.status){
       var video=document.getElementById('video'); 
       video.play(); 
-      alert("item buy");
     }else{
       alert("fail");
     }
