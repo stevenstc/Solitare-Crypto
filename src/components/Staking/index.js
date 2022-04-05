@@ -31,7 +31,6 @@ export default class HomeStaking extends Component {
     this.inventario();
   }
 
-
   async staking( plan ) {
 
     var carta = this.state.card;
@@ -46,11 +45,24 @@ export default class HomeStaking extends Component {
         this.props.wallet.contractStaking.methods
         .staking( plan, carta)
         .send({ from: this.props.currentAccount })
-        .then(()=>{alert("staking started"); this.myStake(); this.inventario();})
+        .then(()=>{
+          alert("staking started"); 
+          this.myStake(); 
+          this.inventario();
+          this.setState({
+            cardImage: "images/default2.png",
+            card: "default",
+          })
+        })
         .catch((error)=>{
           console.log(error);
           alert("staking failed"); 
-          this.myStake(); this.inventario();})
+          this.myStake(); this.inventario();
+          this.setState({
+            cardImage: "images/default2.png",
+            card: "default",
+          });
+        })
 
         
       }else{
@@ -76,17 +88,11 @@ export default class HomeStaking extends Component {
     .retirableBlock(this.props.currentAccount, false)
     .call({ from: this.props.currentAccount });
 
-    console.log(retirableBlock)
-
     verRetirableBlock = new BigNumber(verRetirableBlock).shiftedBy(-18).decimalPlaces(6).toString().replace(".", ",");
     retirable = new BigNumber(retirable).shiftedBy(-18).decimalPlaces(6).toString().replace(".", ",");
     retirableBlock = new BigNumber(retirableBlock).shiftedBy(-18).decimalPlaces(6).toString().replace(".", ",");
 
-    console.log(retirableBlock)
-
     this.setState({
-      cardImage: "images/default2.png",
-      card: "default",
       retirable: retirable,
       retirableBlock: retirableBlock,
       verRetirableBlock: verRetirableBlock
