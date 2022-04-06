@@ -200,10 +200,12 @@ contract StakingV2 is Context, Admin{
     uint256 till;
 
     for (uint256 index = 0; index < usuario.length; index++) {
-        finish = usuario[index].inicio + usuario[index].tiempo;
-        since = payAt[_user] > usuario[index].inicio ? payAt[_user] : usuario[index].inicio;
-        till = block.timestamp > finish ? finish : block.timestamp;
-        reti += (usuario[index].deposito.mul(usuario[index].factor).div(1000)) * (till - since) / usuario[index].tiempo;
+      finish = usuario[index].inicio + usuario[index].tiempo;
+      since = payAt[_user] > usuario[index].inicio ? payAt[_user] : usuario[index].inicio;
+      till = block.timestamp > finish ? finish : block.timestamp;
+      if(till >= since){
+        reti += (((usuario[index].deposito).mul(usuario[index].factor).div(1000)).mul(till.sub(since))).div(usuario[index].tiempo);
+      }
     }
 
     return reti;
@@ -224,8 +226,15 @@ contract StakingV2 is Context, Admin{
       since = payAtBlock[_user] > usuario[index].inicio ? payAtBlock[_user] : usuario[index].inicio;
       till = block.timestamp > finish ? finish : block.timestamp;
 
-      if( (block.timestamp > finish && payAtBlock[_user] <= finish) || _view ){
-        reti += (usuario[index].deposito.mul(usuario[index].factor).div(1000)) * (till - since) / usuario[index].tiempo;
+      if( _view ){
+        if(till >= since){
+          reti += ((((usuario[index].deposito).mul(usuario[index].factor)).div(1000)).mul(till.sub(since)) ).div(usuario[index].tiempo);
+        }
+      }else{
+        if(block.timestamp >= usuario[index].inicio+usuario[index].tiempo && payAtBlock[_user] < usuario[index].inicio+usuario[index].tiempo ){
+          reti += ((usuario[index].deposito).mul(usuario[index].factor)).div(1000);
+        }
+
       }
 
     }
@@ -241,7 +250,7 @@ contract StakingV2 is Context, Admin{
     if( _value <= 0)revert("no hay nada para retirar");
 
     if(_bloqueado){
-      if(block.timestamp > payAtBlock[_msgSender()]+plazoRetiros){
+      if(block.timestamp > payAtBlock[_msgSender()].add(plazoRetiros)){
         payable(_msgSender()).transfer(_value);
         payAtBlock[_msgSender()] = block.timestamp;
       }else{
@@ -249,7 +258,7 @@ contract StakingV2 is Context, Admin{
       }
       
     }else{
-      if(block.timestamp > payAt[_msgSender()]+plazoRetiros){
+      if(block.timestamp > payAt[_msgSender()].add(plazoRetiros)){
         payable(_msgSender()).transfer(_value);
         payAt[_msgSender()] = block.timestamp;
       }else{
