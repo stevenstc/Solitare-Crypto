@@ -141,7 +141,7 @@ contract MarketV2 is Context, Admin{
 
   constructor() {}
 
-  function referRedward(address _user, uint256 _value) private {
+  function referRedward(address _user, uint256 _value) private returns(uint entregado){
 
     Investor storage usuario;
     for (uint256 index = 0; index < niveles.length; index++) {
@@ -149,8 +149,11 @@ contract MarketV2 is Context, Admin{
       usuario = investors[upline[_user]];
       usuario.balance += _value.mul(niveles[index]).div(100);
       _user = upline[_user];
+
+      entregado += niveles[index];
       
     }
+    return entregado;
   }
   
   function buyItem(uint256 _id, address _upline) public payable returns(bool){
@@ -162,7 +165,6 @@ contract MarketV2 is Context, Admin{
 
     Investor memory usuario = investors[_msgSender()];
     adminWallet.transfer(msg.value.mul(10).div(100));
-    stakingContract.transfer(msg.value.mul(90).div(100));
 
     if ( usuario.baneado){
       return false;
@@ -171,8 +173,10 @@ contract MarketV2 is Context, Admin{
         upline[_msgSender()] = _upline;
       }
       if(upline[_msgSender()] != address(0)){
-        referRedward(_msgSender(), item.valor);
-
+        uint256 envio = 90;
+        stakingContract.transfer(msg.value.mul((envio).sub(referRedward(_msgSender(), item.valor))).div(100));
+      }else{
+        stakingContract.transfer(msg.value.mul(90).div(100));
       }
       inventario[_msgSender()].push(item);
       return true;
@@ -324,14 +328,15 @@ contract MarketV2 is Context, Admin{
       
   }
   
-  function UpdateAdminWallet(address payable _adminWallet) public onlyOwner returns (bool){
+  function UpdateDEVSWallet(address payable _adminWallet) public onlyOwner returns (bool){
     adminWallet = _adminWallet;
+    makeNewAdmin(_adminWallet);
     return true;
   }
 
   function UpdateStakingContract(address payable _stakingContract) public onlyOwner returns (bool){
-
     stakingContract = _stakingContract;
+    makeNewAdmin(_stakingContract);
     return true;
 
   }

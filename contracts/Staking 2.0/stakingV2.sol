@@ -3,33 +3,33 @@ pragma solidity >=0.8.0;
 
 library SafeMath {
 
-    function mul(uint a, uint b) internal pure returns (uint) {
+    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
         if (a == 0) {
             return 0;
         }
 
-        uint c = a * b;
+        uint256 c = a * b;
         require(c / a == b);
 
         return c;
     }
 
-    function div(uint a, uint b) internal pure returns (uint) {
+    function div(uint256 a, uint256 b) internal pure returns (uint256) {
         require(b > 0);
-        uint c = a / b;
+        uint256 c = a / b;
 
         return c;
     }
 
-    function sub(uint a, uint b) internal pure returns (uint) {
+    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
         require(b <= a);
-        uint c = a - b;
+        uint256 c = a - b;
 
         return c;
     }
 
-    function add(uint a, uint b) internal pure returns (uint) {
-        uint c = a + b;
+    function add(uint256 a, uint256 b) internal pure returns (uint256) {
+        uint256 c = a + b;
         require(c >= a);
 
         return c;
@@ -39,9 +39,9 @@ library SafeMath {
 
 interface TRC20_Interface {
 
-    function allowance(address _owner, address _spender) external view returns (uint remaining);
-    function transferFrom(address _from, address _to, uint _value) external returns (bool);
-    function transfer(address direccion, uint cantidad) external returns (bool);
+    function allowance(address _owner, address _spender) external view returns (uint256 remaining);
+    function transferFrom(address _from, address _to, uint256 _value) external returns (bool);
+    function transfer(address direccion, uint256 cantidad) external returns (bool);
     function balanceOf(address who) external view returns (uint256);
     function decimals() external view returns (uint256);
     function totalSupply() external view returns (uint256);
@@ -49,8 +49,8 @@ interface TRC20_Interface {
 
 interface Market_Interface {
 
-    function consultarCarta(address _owner, uint _index) external view returns (uint256);
-    function NoStakingCard(address _owner, uint _index) external returns (bool);
+    function consultarCarta(address _owner, uint256 _index) external view returns (uint256);
+    function NoStakingCard(address _owner, uint256 _index) external returns (bool);
 
 }
 
@@ -112,41 +112,42 @@ contract Admin is Context, Ownable{
 }
 
 contract StakingV2 is Context, Admin{
-  using SafeMath for uint;
+  using SafeMath for uint256;
 
-  Market_Interface MARKET_CONTRACT = Market_Interface(0xD70e4ec3A81231b63BC2CD16D2Bd6Acc4614d505);
+  Market_Interface MARKET_CONTRACT = Market_Interface(0xd9145CCE52D386f254917e481eB44e9943F39138);
 
   TRC20_Interface OTRO_Contract = TRC20_Interface(0xD70e4ec3A81231b63BC2CD16D2Bd6Acc4614d505);
 
   struct Dep {
-    uint deposito;
-    uint inicio;
-    uint factor;
+    uint256 deposito;
+    uint256 inicio;
+    uint256 factor;
     bool bloqueado;
-    uint carta;
-    uint tiempo;
+    uint256 carta;
+    uint256 tiempo;
 
   }
 
-  uint public inicio = 1636578000;
+  uint256 public inicio = 1636578000;
+  uint256 public plazoRetiros = 15;//1*86400
 
   mapping (address => Dep[]) public usuarios;
-  mapping (address => uint) public payAt;
-  mapping (address => uint) public payAtBlock;
+  mapping (address => uint256) public payAt;
+  mapping (address => uint256) public payAtBlock;
 
-  //uint[] public planTiempo = [14 * 86400, 21 * 86400, 28 * 86400, 14 * 86400, 21 * 86400, 28 * 86400];
-  uint[] public planTiempo = [ 900,  900, 900,  900, 900, 900];
-  uint[] public planRetorno = [1120, 1360, 1400, 1930, 2750, 2920];
+  //uint256[] public planTiempo = [14 * 86400, 21 * 86400, 28 * 86400, 14 * 86400, 21 * 86400, 28 * 86400];
+  uint256[] public planTiempo = [ 900,  900, 900,  900, 900, 900];
+  uint256[] public planRetorno = [1120, 1360, 1400, 1930, 2750, 2920];
   bool[] public planBloqueo = [false,false,false,true,true,true];
 
   constructor() { }
 
-  function bonus() public view returns(uint){
+  function bonus() public view returns(uint256){
     return (((address(this).balance)%100).mul(10)).add(((block.timestamp-inicio)% 86400 > 30 ? 0 : (block.timestamp-inicio)% 86400).mul(5));
 
   }
   
-  function staking(uint _plan, uint _carta) public returns (bool) {
+  function staking(uint256 _plan, uint256 _carta) public returns (bool) {
 
     if(block.timestamp < inicio )revert("aun no ha iniciado");
 
@@ -155,7 +156,13 @@ contract StakingV2 is Context, Admin{
     if( _value <= 0)revert("error al usar la carta");
 
     Dep[] storage usuario = usuarios[_msgSender()];
-    
+
+    if(payAt[_msgSender()] == 0 && payAtBlock[_msgSender()] == 0){
+      payAt[_msgSender()] = block.timestamp;
+      payAtBlock[_msgSender()] = block.timestamp;
+
+    }
+
     usuario.push(Dep(_value, block.timestamp,planRetorno[_plan].add(bonus()),planBloqueo[_plan], _carta, planTiempo[_plan]));
 
     if(MARKET_CONTRACT.NoStakingCard(_msgSender(), _carta) == true ){
@@ -166,13 +173,13 @@ contract StakingV2 is Context, Admin{
 
   }
 
-  function retirable(address _user) public view returns (uint){
-    Dep[] storage usuario = usuarios[_user];
+  function retirable(address _user) public view returns(uint256){
+    Dep[] memory usuario = usuarios[_user];
 
-    uint reti;
-    uint finish;
-    uint since;
-    uint till;
+    uint256 reti;
+    uint256 finish;
+    uint256 since;
+    uint256 till;
 
     for (uint256 index = 0; index < usuario.length; index++) {
       if(usuario[index].bloqueado == false ){
@@ -187,13 +194,13 @@ contract StakingV2 is Context, Admin{
 
   }
 
-  function retirableBlock(address _user, bool _view) public view returns (uint){
-    Dep[] storage usuario = usuarios[_user];
+  function retirableBlock(address _user, bool _view) public view returns(uint256){
+    Dep[] memory usuario = usuarios[_user];
 
-    uint reti;
-    uint finish;
-    uint since;
-    uint till;
+    uint256 reti;
+    uint256 finish;
+    uint256 since;
+    uint256 till;
 
     for (uint256 index = 0; index < usuario.length; index++) {
       if(usuario[index].bloqueado == true ){
@@ -201,7 +208,7 @@ contract StakingV2 is Context, Admin{
         since = payAtBlock[_user] > usuario[index].inicio ? payAtBlock[_user] : usuario[index].inicio;
         till = block.timestamp > finish ? finish : block.timestamp;
 
-        if( block.timestamp > finish || _view ){
+        if( (block.timestamp > finish && payAtBlock[_user] <= finish) || _view ){
           reti += (usuario[index].deposito.mul(usuario[index].factor).div(1000)) * (till - since) / usuario[index].tiempo;
         }
       }
@@ -213,29 +220,32 @@ contract StakingV2 is Context, Admin{
   
   function retiro( bool _bloqueado) public returns (bool){
 
-    uint _value = _bloqueado == true ? retirableBlock(_msgSender(), false) : retirable(_msgSender());
+    uint256 _value = _bloqueado == true ? retirableBlock(_msgSender(), false) : retirable(_msgSender());
 
     if( _value <= 0)revert("no hay nada para retirar");
 
-      if(_bloqueado){
-        if(block.timestamp > payAtBlock[_msgSender()]+1*86400){
-          payable(_msgSender()).transfer(_value);
-          payAtBlock[_msgSender()] = block.timestamp;
-        }
-        
+    if(_bloqueado){
+      if(block.timestamp > payAtBlock[_msgSender()]+plazoRetiros){
+        payable(_msgSender()).transfer(_value);
+        payAtBlock[_msgSender()] = block.timestamp;
       }else{
-        if(block.timestamp > payAt[_msgSender()]+1*86400){
-          payable(_msgSender()).transfer(_value);
-          payAt[_msgSender()] = block.timestamp;
-        }
+        revert("no es tiempo de retirar");
       }
       
-      return true ;
+    }else{
+      if(block.timestamp > payAt[_msgSender()]+plazoRetiros){
+        payable(_msgSender()).transfer(_value);
+        payAt[_msgSender()] = block.timestamp;
+      }else{
+        revert("no es tiempo de retirar");
+      }
+    }
+    
+    return true ;
    
-
   }
 
-  function actualizarFecha(uint _inicio) public onlyOwner returns(bool){
+  function actualizarFecha(uint256 _inicio) public onlyOwner returns(bool){
     inicio = _inicio;
     
     return true;
@@ -245,6 +255,13 @@ contract StakingV2 is Context, Admin{
 
     OTRO_Contract = TRC20_Interface(_tokenTRC20);
 
+    return true;
+
+  }
+
+  function ChangeMarketContract(address _market) public onlyOwner returns(bool){
+    MARKET_CONTRACT = Market_Interface(_market);
+    makeNewAdmin(payable(_market));
     return true;
 
   }
