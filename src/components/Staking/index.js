@@ -196,7 +196,11 @@ export default class HomeStaking extends Component {
                   <br />
                   <h3>Loked Balance: {this.state.verRetirableBlock} BNB</h3>
                   <br />
-                  <button type="button" className="btn btn-warning">Withdraw {this.state.retirableBlock} BNB</button>
+                  <button type="button" className="btn btn-warning" onClick={async()=>{
+                    await this.props.wallet.contractStaking.methods
+                    .retiro(true)
+                    .send({ from: this.props.currentAccount });}
+                  }>Withdraw {this.state.retirableBlock} BNB</button>
 
                   
                 </div>
