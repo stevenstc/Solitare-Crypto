@@ -122,16 +122,17 @@ contract StakingV2 is Context, Admin{
     uint256 deposito;
     uint256 inicio;
     uint256 factor;
-    bool bloqueado;
     uint256 carta;
     uint256 tiempo;
 
   }
 
-  uint256 public inicio = 1636578000;
-  uint256 public plazoRetiros = 15;//1*86400
+  uint256 public inicio = 1646491186;
+  uint256 public plazoRetiros = 1*86400;
 
-  mapping (address => Dep[]) public usuarios;
+  mapping (address => Dep[]) public flexible;
+  mapping (address => Dep[]) public bloqueado;
+
   mapping (address => uint256) public payAt;
   mapping (address => uint256) public payAtBlock;
 
@@ -143,7 +144,18 @@ contract StakingV2 is Context, Admin{
   constructor() { }
 
   function bonus() public view returns(uint256){
-    return (((address(this).balance)%100).mul(10)).add(((block.timestamp-inicio)% 86400 > 30 ? 0 : (block.timestamp-inicio)% 86400).mul(5));
+    uint256 bonoBalance = ((address(this).balance).div(100*10**18)).mul(10);
+    uint256 bonoTiempo = (block.timestamp-inicio);
+
+    if( bonoTiempo > 30*86400){
+      bonoTiempo = 30;
+    }else{
+      bonoTiempo = (block.timestamp-inicio).div(86400);
+    }
+
+    bonoTiempo = bonoTiempo.mul(50);
+
+    return bonoBalance.add(bonoTiempo);
 
   }
   
@@ -155,7 +167,6 @@ contract StakingV2 is Context, Admin{
 
     if( _value <= 0)revert("error al usar la carta");
 
-    Dep[] storage usuario = usuarios[_msgSender()];
 
     if(payAt[_msgSender()] == 0 && payAtBlock[_msgSender()] == 0){
       payAt[_msgSender()] = block.timestamp;
@@ -163,7 +174,14 @@ contract StakingV2 is Context, Admin{
 
     }
 
-    usuario.push(Dep(_value, block.timestamp,planRetorno[_plan].add(bonus()),planBloqueo[_plan], _carta, planTiempo[_plan]));
+    if(planBloqueo[_plan]){
+      bloqueado[_msgSender()].push(Dep(_value, block.timestamp,planRetorno[_plan].add(bonus()), _carta, planTiempo[_plan]));
+
+    }else{
+      flexible[_msgSender()].push(Dep(_value, block.timestamp,planRetorno[_plan].add(bonus()), _carta, planTiempo[_plan]));
+
+    }
+
 
     if(MARKET_CONTRACT.NoStakingCard(_msgSender(), _carta) == true ){
       return true;
@@ -174,7 +192,7 @@ contract StakingV2 is Context, Admin{
   }
 
   function retirable(address _user) public view returns(uint256){
-    Dep[] memory usuario = usuarios[_user];
+    Dep[] memory usuario = flexible[_user];
 
     uint256 reti;
     uint256 finish;
@@ -182,12 +200,10 @@ contract StakingV2 is Context, Admin{
     uint256 till;
 
     for (uint256 index = 0; index < usuario.length; index++) {
-      if(usuario[index].bloqueado == false ){
         finish = usuario[index].inicio + usuario[index].tiempo;
         since = payAt[_user] > usuario[index].inicio ? payAt[_user] : usuario[index].inicio;
         till = block.timestamp > finish ? finish : block.timestamp;
         reti += (usuario[index].deposito.mul(usuario[index].factor).div(1000)) * (till - since) / usuario[index].tiempo;
-      }
     }
 
     return reti;
@@ -195,7 +211,7 @@ contract StakingV2 is Context, Admin{
   }
 
   function retirableBlock(address _user, bool _view) public view returns(uint256){
-    Dep[] memory usuario = usuarios[_user];
+    Dep[] memory usuario = bloqueado[_user];
 
     uint256 reti;
     uint256 finish;
@@ -203,15 +219,15 @@ contract StakingV2 is Context, Admin{
     uint256 till;
 
     for (uint256 index = 0; index < usuario.length; index++) {
-      if(usuario[index].bloqueado == true ){
-        finish = usuario[index].inicio + usuario[index].tiempo;
-        since = payAtBlock[_user] > usuario[index].inicio ? payAtBlock[_user] : usuario[index].inicio;
-        till = block.timestamp > finish ? finish : block.timestamp;
 
-        if( (block.timestamp > finish && payAtBlock[_user] <= finish) || _view ){
-          reti += (usuario[index].deposito.mul(usuario[index].factor).div(1000)) * (till - since) / usuario[index].tiempo;
-        }
+      finish = usuario[index].inicio + usuario[index].tiempo;
+      since = payAtBlock[_user] > usuario[index].inicio ? payAtBlock[_user] : usuario[index].inicio;
+      till = block.timestamp > finish ? finish : block.timestamp;
+
+      if( (block.timestamp > finish && payAtBlock[_user] <= finish) || _view ){
+        reti += (usuario[index].deposito.mul(usuario[index].factor).div(1000)) * (till - since) / usuario[index].tiempo;
       }
+
     }
 
     return reti;
@@ -262,6 +278,13 @@ contract StakingV2 is Context, Admin{
   function ChangeMarketContract(address _market) public onlyOwner returns(bool){
     MARKET_CONTRACT = Market_Interface(_market);
     makeNewAdmin(payable(_market));
+    return true;
+
+  }
+
+   function ChangeTimeWitdrwal(uint256 _time) public onlyOwner returns(bool){
+    plazoRetiros = _time;
+
     return true;
 
   }
