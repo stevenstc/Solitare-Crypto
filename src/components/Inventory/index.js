@@ -710,13 +710,14 @@ this.update();
                 { 
                   
                   var cantidad = document.getElementById("cantidadSbnb2").value;
-                  var monedas = new BigNumber(parseFloat(cantidad)).shiftedBy(18);
+                  console.log(cantidad)
+                  var monedas = new BigNumber(parseFloat(cantidad)).shiftedBy(18).toString();
                   var tramite = parseFloat((this.state.balanceMarket).replace(",","."));
 
                   if(tramite > 0 && tramite-parseFloat(cantidad) >= 0 && parseFloat(cantidad) >= 0.002 && parseFloat(cantidad) <= 1){
                
                     var result = await this.props.wallet.contractMarket.methods
-                    .sellCoins(monedas)
+                    .sellCoins(monedas+"")
                     .send({ from: this.props.currentAccount });
 
                     alert("your hash transaction: "+result.transactionHash);
