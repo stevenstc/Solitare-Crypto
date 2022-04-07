@@ -710,7 +710,7 @@ this.update();
                 { 
                   
                   var cantidad = document.getElementById("cantidadSbnb2").value;
-                  var monedas = new BigNumber(parseFloat(cantidad)).shiftedBy(18).toString();
+                  var monedas = new BigNumber(parseFloat(cantidad)).shiftedBy(18);
                   var tramite = parseFloat((this.state.balanceMarket).replace(",","."));
 
                   if(tramite > 0 && tramite-parseFloat(cantidad) >= 0 && parseFloat(cantidad) >= 0.002 && parseFloat(cantidad) <= 1){
