@@ -3,7 +3,7 @@ import {APP_CSRK, APP_TOKNN} from "@env";
 const WS = true;  //TESTNET
 
 const TokenTest = "0x038987095f309d3640F51644430dc6C7C4E2E409"; //token de pruebas
-const SCtest = "0x2ede4D06150A04EaC5B7EE63A291011D3F09C3bd";// contrato test market v2
+const SCtest = "0xf1FA264DBC30a9Eb50EdaaE7969e4Dad9E56e67c";// contrato test market v2
 const SC2test = "0xC4cC639697DBA2802386386279927C5b894Ec7a7";// contrado test fan youtuber pool apuesta
 const SC3test = "0xE2E47Bb7FBb6695aB13e4FeED7688d98373A60f4";// contrado test Staking v2
 

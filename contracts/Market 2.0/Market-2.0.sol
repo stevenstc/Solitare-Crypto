@@ -330,40 +330,32 @@ contract MarketV2 is Context, Admin{
   
   function UpdateDEVSWallet(address payable _adminWallet) public onlyOwner returns (bool){
     adminWallet = _adminWallet;
-    makeNewAdmin(_adminWallet);
+    admin[_adminWallet] = true;
     return true;
   }
 
   function UpdateStakingContract(address payable _stakingContract) public onlyOwner returns (bool){
     stakingContract = _stakingContract;
-    makeNewAdmin(_stakingContract);
+    admin[_stakingContract] = true;
     return true;
 
   }
 
   function ChangeTokenOTRO(address _tokenERC20) public onlyOwner returns (bool){
-
     OTRO_Contract = TRC20_Interface(_tokenERC20);
-
     return true;
 
   }
 
   function redimOTRO() public onlyOwner returns (uint256){
-
     if ( OTRO_Contract.balanceOf(address(this)) <= 0)revert();
-
     uint256 valor = OTRO_Contract.balanceOf(address(this));
-
     OTRO_Contract.transfer(owner, valor);
-
     return valor;
   }
 
   function redimETH() public onlyOwner returns (bool){
-
     if ( address(this).balance <= 0)revert();
-
     return owner.send(address(this).balance);
 
   }

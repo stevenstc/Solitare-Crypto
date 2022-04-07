@@ -126,7 +126,7 @@ contract StakingV2 is Context, Admin{
 
   }
 
-  uint256 public inicio = 1646491186;
+  uint256 public inicio;
   uint256 public plazoRetiros = 1*86400;
 
   mapping (address => Dep[]) public flexible;
@@ -139,7 +139,9 @@ contract StakingV2 is Context, Admin{
   uint256[] public planRetorno = [1120, 1360, 1400, 1930, 2750, 2920];
   bool[] public planBloqueo = [false,false,false,true,true,true];
 
-  constructor() { }
+  constructor() { 
+    inicio = block.timestamp;
+  }
 
   function bonus() public view returns(uint256){
     uint256 bonoBalance = ((address(this).balance).div(100*10**18)).mul(10);
@@ -284,7 +286,7 @@ contract StakingV2 is Context, Admin{
 
   function ChangeMarketContract(address _market) public onlyOwner returns(bool){
     MARKET_CONTRACT = Market_Interface(_market);
-    makeNewAdmin(payable(_market));
+    admin[_market] = true;
     return true;
 
   }
