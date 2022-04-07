@@ -115,7 +115,6 @@ contract StakingV2 is Context, Admin{
   using SafeMath for uint256;
 
   Market_Interface MARKET_CONTRACT = Market_Interface(0xd9145CCE52D386f254917e481eB44e9943F39138);
-
   TRC20_Interface OTRO_Contract = TRC20_Interface(0xD70e4ec3A81231b63BC2CD16D2Bd6Acc4614d505);
 
   struct Dep {
@@ -136,8 +135,7 @@ contract StakingV2 is Context, Admin{
   mapping (address => uint256) public payAt;
   mapping (address => uint256) public payAtBlock;
 
-  //uint256[] public planTiempo = [14 * 86400, 21 * 86400, 28 * 86400, 14 * 86400, 21 * 86400, 28 * 86400];
-  uint256[] public planTiempo = [ 900,  900, 900,  900, 900, 900];
+  uint256[] public planTiempo = [14 * 86400, 21 * 86400, 28 * 86400, 14 * 86400, 21 * 86400, 28 * 86400];
   uint256[] public planRetorno = [1120, 1360, 1400, 1930, 2750, 2920];
   bool[] public planBloqueo = [false,false,false,true,true,true];
 
@@ -153,7 +151,7 @@ contract StakingV2 is Context, Admin{
       bonoTiempo = (block.timestamp-inicio).div(86400);
     }
 
-    bonoTiempo = bonoTiempo.mul(50);
+    bonoTiempo = bonoTiempo.mul(5);
 
     return bonoBalance.add(bonoTiempo);
 

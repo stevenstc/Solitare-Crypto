@@ -125,18 +125,18 @@ export default class HomeStaking extends Component {
       .call({ from: this.props.currentAccount });
 
       var inventario = []
-      let item;
+      var item = [];
 
     for (let index = 0; index < result; index++) {
-      item = await this.props.wallet.contractMarket.methods
+      item[index] = await this.props.wallet.contractMarket.methods
         .inventario(this.props.currentAccount, index)
         .call({ from: this.props.currentAccount });
 
-      if(item.stakear)
+      if(item[index].stakear)
         inventario.push(
 
-          <div className="col-md-4" style={{cursor:"pointer"}} key={`itemsTeam-${index}`} onClick={()=>{this.setState({ cardImage: "images/" + item.nombre + ".gif", card: index})} } data-dismiss="modal">
-            <img className="img-thumbnail" src={"images/" + item.nombre + ".gif"} width="100%" alt={"team "+item.nombre} />
+          <div className="col-md-4" style={{cursor:"pointer"}} key={`itemsTeam-${index}`}>
+            <img className="img-thumbnail" src={"images/" + item[index].nombre + ".gif"} width="100%" alt={"team "+item[index].nombre} onClick={()=>{this.setState({ cardImage: "images/" + item[index].nombre + ".gif", card: index})} } />
           </div>
 
         )
@@ -260,6 +260,10 @@ export default class HomeStaking extends Component {
                           {this.state.inventario}
                         </div>
                       </div>
+
+                    </div>
+                    <div className="modal-footer ">
+                    <button type="button" className="btn btn-success" data-dismiss="modal">Done</button>
                     </div>
                     
                 </div>
