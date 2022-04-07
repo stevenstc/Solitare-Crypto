@@ -143,11 +143,9 @@ contract MarketV2 is Context, Admin{
 
   function referRedward(address _user, uint256 _value) private returns(uint entregado){
 
-    Investor storage usuario;
     for (uint256 index = 0; index < niveles.length; index++) {
-      if(_user == address(0))break;
-      usuario = investors[upline[_user]];
-      usuario.balance += _value.mul(niveles[index]).div(100);
+      if(upline[_user] == address(0))break;
+      investors[upline[_user]].balance += _value.mul(niveles[index]).div(100);
       _user = upline[_user];
 
       entregado += niveles[index];
