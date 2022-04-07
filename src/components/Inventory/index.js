@@ -708,41 +708,39 @@ this.update();
                 className="btn btn-primary"
                 onClick={async() => 
                 { 
-
-                  var resultado = await fetch(cons.API+"api/v1/consultar/csc/cuenta/"+this.props.wallet.contractMarket._address)
-                  resultado = await resultado.text()
-                  console.log(resultado);
+                  
                   var cantidad = document.getElementById("cantidadSbnb2").value;
+                  var monedas = new BigNumber(parseFloat(cantidad)).shiftedBy(18);
+                  var tramite = parseFloat((this.state.balanceMarket).replace(",","."));
 
-                  if(parseFloat(cantidad) > parseFloat(resultado) ){
-                    alert("Please try again later")
-                    return;
-                  }
 
-                  if(parseFloat(this.state.balanceMarket) > 0 && parseFloat(this.state.balanceMarket)-parseFloat(cantidad) >= 0 && parseInt(cantidad) >= 100 && parseInt(cantidad)<= 5000){
-                    
-                    this.setState({
-                      balanceMarket: parseFloat(this.state.balanceMarket)-parseFloat(cantidad)
-                    })
+                  console.log(tramite)
+                  console.log(monedas.toString())
+                  console.log(cantidad)
 
+
+                  if(tramite > 0 && tramite-parseFloat(cantidad) >= 0 && parseFloat(cantidad) >= 0.002 && parseFloat(cantidad) <= 1){
+               
                     var result = await this.props.wallet.contractMarket.methods
-                    .sellCoins(cantidad+"000000000000000000")
+                    .sellCoins(monedas)
                     .send({ from: this.props.currentAccount });
 
                     alert("your hash transaction: "+result.transactionHash);
 
                   }else{
-                    if(parseFloat(cantidad) < 500){
-                      alert("Please set amount greater than 500 SBNB")
+                    alert("no entro")
+                    if(parseFloat(cantidad) < 0.002){
+                      alert("Please set amount greater than 0.002 SBNB")
                     }
 
-                    if(parseFloat(cantidad) > 1000){
-                      alert("Set an amount less than 1000 SBNB")
+                    if(parseFloat(cantidad) > 1){
+                      alert("Set an amount less than 1 SBNB")
                     }
 
-                    if(parseFloat(this.state.balanceMarket) <= 0){
+                    if(parseFloat(tramite) < parseFloat(cantidad)){
                       alert("Insufficient Funds")
                     }
+               
                   }
 
                   this.update();
@@ -752,6 +750,7 @@ this.update();
                 {"<- "}
                 Sell SBNB
               </button>
+
               <br/><br/>
               <button
                 className="btn btn-primary"
