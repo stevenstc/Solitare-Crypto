@@ -218,7 +218,6 @@ class App extends Component {
           return(<div className="container"><h1 className="text-center">Loading...</h1></div>);
 
         }
-     
 
   }
 }

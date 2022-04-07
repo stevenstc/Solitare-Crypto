@@ -99,9 +99,6 @@ export default class Market extends Component {
 
   }
 
-
-
-
   async items() {
     if(!this.state.loading){
       this.setState({

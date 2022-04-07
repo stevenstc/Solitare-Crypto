@@ -215,9 +215,7 @@ export default class HomeStaking extends Component {
 
                 <div className="col-md-12" >
                   <img src="images/plan1.1.png" alt="imagen del plan 1.1"  onClick={()=>{this.staking(0)}} style={{cursor: "pointer"}}/>
-                
                   <img src="images/plan1.2.png" alt="imagen del plan 1.2"  onClick={()=>{this.staking(1)}} style={{cursor: "pointer"}}/>
-                
                   <img src="images/plan1.3.png" alt="imagen del plan 1.3"  onClick={()=>{this.staking(2)}} style={{cursor: "pointer"}}/>
                 </div>
                 
