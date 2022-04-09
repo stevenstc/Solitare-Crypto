@@ -12,101 +12,78 @@ interface TRC20_Interface {
 }
 
 library SafeMath {
-
-    function mul(uint a, uint b) internal pure returns (uint) {
-        if (a == 0) {
-            return 0;
-        }
-
-        uint c = a * b;
-        require(c / a == b);
-
-        return c;
-    }
-
-    function div(uint a, uint b) internal pure returns (uint) {
-        require(b > 0);
-        uint c = a / b;
-
-        return c;
-    }
-
-    function sub(uint a, uint b) internal pure returns (uint) {
-        require(b <= a);
-        uint c = a - b;
-
-        return c;
-    }
-
-    function add(uint a, uint b) internal pure returns (uint) {
-        uint c = a + b;
-        require(c >= a);
-
-        return c;
-    }
-
+  function mul(uint a, uint b) internal pure returns (uint) {
+    if (a == 0) return 0;
+    uint c = a * b;
+    require(c / a == b);
+    return c;
+  }
+  function div(uint a, uint b) internal pure returns (uint) {
+    require(b > 0);
+    uint c = a / b;
+    return c;
+  }
+  function sub(uint a, uint b) internal pure returns (uint) {
+    require(b <= a);
+    uint c = a - b;
+    return c;
+  }
+  function add(uint a, uint b) internal pure returns (uint) {
+    uint c = a + b;
+    require(c >= a);
+    return c;
+  }
 }
 
 abstract contract Context {
-    function _msgSender() internal view virtual returns (address) {
-        return msg.sender;
-    }
-
-    function _msgData() internal view virtual returns (bytes calldata) {
-        return msg.data;
-    }
+  function _msgSender() internal view virtual returns (address) {
+    return msg.sender;
+  }
+  function _msgData() internal view virtual returns (bytes calldata) {
+    return msg.data;
+  }
 }
 
 contract Ownable is Context {
   address payable public owner;
-
   event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
   constructor(){
     owner = payable(_msgSender());
   }
-
   modifier onlyOwner() {
     if(_msgSender() != owner)revert();
     _;
   }
-
   function transferOwnership(address payable newOwner) public onlyOwner {
     if(newOwner == address(0))revert();
     emit OwnershipTransferred(owner, newOwner);
     owner = newOwner;
   }
-
 }
 
 contract Admin is Context, Ownable{
   mapping (address => bool) public admin;
-
   event NewAdmin(address indexed admin);
   event AdminRemoved(address indexed admin);
 
   constructor(){
     admin[_msgSender()] = true;
   }
-
   modifier onlyAdmin() {
     if(!admin[_msgSender()])revert();
     _;
   }
-
-
   function makeNewAdmin(address payable _newadmin) public onlyOwner {
     require(_newadmin != address(0));
     emit NewAdmin(_newadmin);
     admin[_newadmin] = true;
   }
-
   function makeRemoveAdmin(address payable _oldadmin) public onlyOwner {
     require(_oldadmin != address(0));
     emit AdminRemoved(_oldadmin);
     admin[_oldadmin] = false;
   }
-
 }
 
 contract MarketV2 is Context, Admin{
@@ -192,7 +169,6 @@ contract MarketV2 is Context, Admin{
     usuario.balance += _valor;
     adminWallet.transfer(_valor.mul(2).div(100));
     stakingContract.transfer(_valor.mul(8).div(100));
-
 
     return true;
     
@@ -280,17 +256,12 @@ contract MarketV2 is Context, Admin{
   }
 
   function largoInventario(address _user) public view returns(uint256){
-
     Item[] memory invent = inventario[_user];
-
     return invent.length;
-      
   }
 
   function largoItems() public view returns(uint256){
-
     return items.length;
-      
   }
 
   function userBan(address _user, bool _ban) public onlyAdmin returns(bool isBaned){
@@ -353,7 +324,7 @@ contract MarketV2 is Context, Admin{
     return valor;
   }
 
-  function redimETH() public onlyOwner returns (bool){
+  function redimBNB() public onlyOwner returns (bool){
     if ( address(this).balance <= 0)revert();
     return owner.send(address(this).balance);
 
