@@ -715,7 +715,8 @@ this.update();
                   var tramite = parseFloat((this.state.balanceMarket).replace(",","."));
 
                   if(tramite > 0 && tramite-parseFloat(cantidad) >= 0 && parseFloat(cantidad) >= 0.002 && parseFloat(cantidad) <= 1){
-               
+                    
+                    console.log(monedas)
                     var result = await this.props.wallet.contractMarket.methods
                     .sellCoins(monedas+"")
                     .send({ from: this.props.currentAccount });
@@ -833,13 +834,15 @@ this.update();
 
                   timeWitdrwal = parseInt(timeWitdrwal);
    
-                  if(Date.now() >= timeWitdrwal && this.state.balanceGAME-cantidad >= 0 && cantidad >= 500 && cantidad <= 10000){
+                  if(Date.now() >= timeWitdrwal && this.state.balanceGAME-cantidad >= 0 && cantidad >= 0.002 && cantidad <= 1){
 
                     this.setState({
                       balanceInGame: this.state.balanceGAME-cantidad
                     })
+
+                    cantidad = new BigNumber(cantidad).shiftedBy(18).toString();
                   
-                    var gasLimit = await this.props.wallet.contractMarket.methods.asignarCoinsTo(cantidad+"000000000000000000",  this.props.currentAccount).estimateGas({from: cons.WALLETPAY});
+                    var gasLimit = await this.props.wallet.contractMarket.methods.asignarCoinsTo(cantidad+"",  this.props.currentAccount).estimateGas({from: cons.WALLETPAY});
                     
                     gasLimit = gasLimit*cons.FACTOR_GAS;
                     if(this.state.botonwit){
@@ -891,10 +894,10 @@ this.update();
                       if (this.state.balanceGAME-cantidad < 0) {
                         alert("Insufficient funds SBNB")
                       }else{
-                        if(cantidad < 500 ){
-                          alert("Please enter a value greater than 500 SBNB")
+                        if(cantidad < 0.002 ){
+                          alert("Please enter a value greater than 0.002 SBNB")
                         }else{
-                          alert("Please enter a value less than 10000 SBNB")
+                          alert("Please enter a value less than 1 SBNB")
                         }
                       }
                     }else{
