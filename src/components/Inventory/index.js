@@ -708,13 +708,17 @@ this.update();
                 className="btn btn-primary"
                 onClick={async() => 
                 { 
+
+                  var user = await this.props.wallet.contractMarket.methods
+                    .investors(this.props.currentAccount )
+                    .call({ from: this.props.currentAccount });
                   
                   var cantidad = document.getElementById("cantidadSbnb2").value;
                   console.log(cantidad)
                   var monedas = new BigNumber(parseFloat(cantidad)).shiftedBy(18).toString();
                   var tramite = parseFloat((this.state.balanceMarket).replace(",","."));
 
-                  if(tramite > 0 && tramite-parseFloat(cantidad) >= 0 && parseFloat(cantidad) >= 0.002 && parseFloat(cantidad) <= 1){
+                  if(user.payAt+ 86400 <= (Date.now()/1000)  && tramite > 0 && tramite-parseFloat(cantidad) >= 0 && parseFloat(cantidad) >= 0.002 && parseFloat(cantidad) <= 1){
                     
                     console.log(monedas)
                     var result = await this.props.wallet.contractMarket.methods
@@ -735,6 +739,11 @@ this.update();
 
                     if(parseFloat(tramite) < parseFloat(cantidad)){
                       alert("Insufficient Funds")
+                    }
+
+                    if(user.payAt+ 86400 <= (Date.now()/1000)){
+                      alert("Please Wait 24 hours")
+
                     }
                
                   }
@@ -829,16 +838,9 @@ this.update();
                   var cantidad = document.getElementById("cantidadSbnb3").value;
                   cantidad = parseFloat(cantidad);
 
-                  var timeWitdrwal = await fetch(cons.API+"api/v1/time/coinsalmarket/"+this.props.currentAccount);
-                  timeWitdrwal = await timeWitdrwal.text();
-
-                  timeWitdrwal = parseInt(timeWitdrwal);
+                  var balGame = parseFloat((this.state.balanceGAME).replace(",","."))
    
-                  if(Date.now() >= timeWitdrwal && this.state.balanceGAME-cantidad >= 0 && cantidad >= 0.002 && cantidad <= 1){
-
-                    this.setState({
-                      balanceInGame: this.state.balanceGAME-cantidad
-                    })
+                  if(balGame-cantidad >= 0 && cantidad >= 0.002 && cantidad <= 1){
 
                     cantidad = new BigNumber(cantidad).shiftedBy(18).toString();
                   
@@ -890,18 +892,15 @@ this.update();
                     }
                     this.update()
                   }else{
-                    if(Date.now() >= timeWitdrwal){
-                      if (this.state.balanceGAME-cantidad < 0) {
-                        alert("Insufficient funds SBNB")
-                      }else{
-                        if(cantidad < 0.002 ){
-                          alert("Please enter a value greater than 0.002 SBNB")
-                        }else{
-                          alert("Please enter a value less than 1 SBNB")
-                        }
-                      }
+                   
+                    if (this.state.balanceGAME-cantidad < 0) {
+                      alert("Insufficient funds SBNB")
                     }else{
-                      alert("It is not yet time to withdraw")
+                      if(cantidad < 0.002 ){
+                        alert("Please enter a value greater than 0.002 SBNB")
+                      }else{
+                        alert("Please enter a value less than 1 SBNB")
+                      }
                     }
                     
                   }
@@ -910,9 +909,6 @@ this.update();
                 
                 {" <-"} Withdraw To Exchange {" "}
               </button>
-              <br /><br />
-
-              Next Time to Witdrwal: {this.state.timeWitdrwal}
 
             </div>
 
