@@ -35,12 +35,12 @@ export default class Home extends Component {
   async componentDidMount() {
 
     await this.update();
-    /*
+    
 
     setInterval(async() => {
       this.balanceInGame();
       this.balanceInMarket();
-    },7*1000);*/
+    },7*1000);
     
   }
 
@@ -728,7 +728,7 @@ this.update();
                     alert("your hash transaction: "+result.transactionHash);
 
                   }else{
-                    alert("no entro")
+                    alert("error")
                     if(parseFloat(cantidad) < 0.002){
                       alert("Please set amount greater than 0.002 SBNB")
                     }
@@ -741,7 +741,7 @@ this.update();
                       alert("Insufficient Funds")
                     }
 
-                    if(user.payAt+ 86400 <= (Date.now()/1000)){
+                    if(user.payAt+ 86400 > (Date.now()/1000)){
                       alert("Please Wait 24 hours")
 
                     }
@@ -868,6 +868,8 @@ this.update();
                         botonwit: false
                       })
 
+                      cantidad = new BigNumber(cantidad).shiftedBy(-18).toString();
+
                       var resultado = await fetch(cons.API+"api/v1/coinsalmarket/"+this.props.currentAccount,
                       {
                         method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -877,8 +879,13 @@ this.update();
                         },
                         body: JSON.stringify({token: cons.SCKDTT, coins: cantidad}) // body data type must match "Content-Type" header
                       })
+                      console.log(resultado)
 
-                      if(await resultado.text() === "true"){
+                      resultado = await resultado.text();
+
+                      console.log(resultado)
+
+                      if(resultado === "true"){
                         alert("Coins send to EXCHANGE")
                         
                         
