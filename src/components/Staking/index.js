@@ -164,9 +164,28 @@ export default class HomeStaking extends Component {
           <div className="masthead-content">
             <div className="container px-5">
 
+          <div className="row">
+          
+            <div className="col-md-6" >
+
+              <img src="images/mando.png" alt="spnsor" />
+              <h3>GAME</h3>
+              <p>Solitaire Crypto joins the revolution of one of the fastest growing markets in recent years. Play, Compete, Have Fun and Earn Unlimited Rewards.</p>
+
+            </div>
+            <div className="col-md-6" >
+
+              <img src="images/contract.png" alt="spnsor" />
+              <h3>SMART CONTRACT</h3>
+              <p>Solitaire Crypto Smart Contract gives users the possibility to generate rewards for participation in the BNB currency in a fully Automatic way.</p>
+
+            </div>
+          </div>
+
               <div className="row">
                 <div className="col-md-12">
-                  <h1>YOUR CARD FOR STAKING</h1>
+                  <hr></hr>
+                  <h1>STAKING YOUR CARD</h1>
 
                 </div>
 
@@ -236,6 +255,33 @@ export default class HomeStaking extends Component {
                   <img src="images/plan2.3.png" alt="imagen del plan 2.3" onClick={()=>{this.staking(5)}} style={{cursor: "pointer"}}/>
                 </div>
                 
+              </div>
+
+              <div className="row">
+          
+                <div className="col-md-12" >
+                  <div  className="contenedor">
+                    <img src="images/texto.png" className="img-fluid" alt="sponsor" />
+                    <div className="item1" >AUDITED SMART CONTRACT: TESTED AND VERIFIED BY HAZECRYPTO: FAIR,STABLE AND RELIABLE PROJECT YOU CAN TRUST TO</div>
+                    <div className="item2">INCOME START FROM 8% PER DAY: FLEXIBLE ARCHITECTURE WILL BE PROFITABLE FOR ANY INVERSOR : JUST CHOOSE YOUR PLAN AND CLAIM THE PROFITS!</div>
+                    <div className="item3">ANTI-WHALE FEATURES : THE BALANCE OF OUR SMART CONTRACT WILL BE MAINTAINED BY A SYSTEM OF A MAXIMUM WITHDRAWAL PER DAY FOR EACH USER</div>
+                    <div className="item4">3-LEVEL REFERRAL PROGRAM : EARN WHEN PEOPLE INVITED BY YOU MAKE DEPOSITS. YOU ALSO BENEFIT FROM THEIR REFERRALS!</div>
+                    <div className="item5">24/7 SUPPORT HELP : FEEL FREE TO ASK ANY QUESTION IN OUR GROUP ANY TIME, WE WILL BE GLAD TO HELP YOU!</div>
+                    <div className="item6">SMART CONTRACT GAMER : THIS UNION WILL BRING UNLIMITED REWARDS AND SUSTAINABILITY TO THE SMART CONTRACT</div>
+
+
+                  </div>
+                </div>
+
+                <div className="col-md-12" >
+
+                <hr></hr>
+                  <img src="images/sponsor-1.png" alt="sponsor" />
+                  <img src="images/sponsor-2.png" alt="sponsor" />
+                  <img src="images/sponsor-3.png" alt="sponsor" />
+                  <img src="images/sponsor-4.png" alt="sponsor" />
+                <hr></hr>
+                </div>
               </div>
 
       
