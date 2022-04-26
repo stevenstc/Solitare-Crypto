@@ -146,8 +146,6 @@ export default class HomeStaking extends Component {
       inventario = <h1>No cards to staking, please buy</h1>
     }
 
-    console.log(this.props.wallet);
-
     var balance = await this.props.wallet.web3.eth.getBalance(this.props.wallet.contractStaking._address);
 
     balance = new BigNumber(balance);
