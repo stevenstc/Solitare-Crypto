@@ -154,12 +154,15 @@ export default class HomeStaking extends Component {
   render() {
     return (
       <>
-      <img
-        className=" pb-4"
-        src="images/banner.png"
-        width="100%"
-        alt="banner solitaire crypto"
-      />
+      <div className="contenedor">
+        <img
+          className=" pb-4"
+          src="images/banner.png"
+          width="100%"
+          alt="banner solitaire crypto"
+        />
+        <div className="item-banner"><h1>1000 BNB</h1></div>
+      </div>
         <header className="masthead text-center text-white">
           <div className="masthead-content">
             <div className="container px-5">
@@ -262,12 +265,12 @@ export default class HomeStaking extends Component {
                 <div className="col-md-12" >
                   <div  className="contenedor">
                     <img src="images/texto.png" className="img-fluid" alt="sponsor" />
-                    <div className="item1" >AUDITED SMART CONTRACT: TESTED AND VERIFIED BY HAZECRYPTO: FAIR,STABLE AND RELIABLE PROJECT YOU CAN TRUST TO</div>
-                    <div className="item2">INCOME START FROM 8% PER DAY: FLEXIBLE ARCHITECTURE WILL BE PROFITABLE FOR ANY INVERSOR : JUST CHOOSE YOUR PLAN AND CLAIM THE PROFITS!</div>
-                    <div className="item3">ANTI-WHALE FEATURES : THE BALANCE OF OUR SMART CONTRACT WILL BE MAINTAINED BY A SYSTEM OF A MAXIMUM WITHDRAWAL PER DAY FOR EACH USER</div>
-                    <div className="item4">3-LEVEL REFERRAL PROGRAM : EARN WHEN PEOPLE INVITED BY YOU MAKE DEPOSITS. YOU ALSO BENEFIT FROM THEIR REFERRALS!</div>
-                    <div className="item5">24/7 SUPPORT HELP : FEEL FREE TO ASK ANY QUESTION IN OUR GROUP ANY TIME, WE WILL BE GLAD TO HELP YOU!</div>
-                    <div className="item6">SMART CONTRACT GAMER : THIS UNION WILL BRING UNLIMITED REWARDS AND SUSTAINABILITY TO THE SMART CONTRACT</div>
+                    <div className="item1" ><img src="images/smc.png" className="img-fluid" align="left"></img>AUDITED SMART CONTRACT: TESTED AND VERIFIED BY HAZECRYPTO: FAIR,STABLE AND RELIABLE PROJECT YOU CAN TRUST TO</div>
+                    <div className="item2"><img src="images/dinero.png" className="img-fluid" align="left"></img>INCOME START FROM 8% PER DAY: FLEXIBLE ARCHITECTURE WILL BE PROFITABLE FOR ANY INVERSOR : JUST CHOOSE YOUR PLAN AND CLAIM THE PROFITS!</div>
+                    <div className="item3"><img src="images/ballena.png" className="img-fluid" align="left"></img>ANTI-WHALE FEATURES : THE BALANCE OF OUR SMART CONTRACT WILL BE MAINTAINED BY A SYSTEM OF A MAXIMUM WITHDRAWAL PER DAY FOR EACH USER</div>
+                    <div className="item4"><img src="images/exchange.png" className="img-fluid" align="left"></img>3-LEVEL REFERRAL PROGRAM : EARN WHEN PEOPLE INVITED BY YOU MAKE DEPOSITS. YOU ALSO BENEFIT FROM THEIR REFERRALS!</div>
+                    <div className="item5"><img src="images/support.png" className="img-fluid" align="left"></img>24/7 SUPPORT HELP : FEEL FREE TO ASK ANY QUESTION IN OUR GROUP ANY TIME, WE WILL BE GLAD TO HELP YOU!</div>
+                    <div className="item6"><img src="images/mando-control.png" className="img-fluid" align="left"></img>SMART CONTRACT GAMER : THIS UNION WILL BRING UNLIMITED REWARDS AND SUSTAINABILITY TO THE SMART CONTRACT</div>
 
 
                   </div>

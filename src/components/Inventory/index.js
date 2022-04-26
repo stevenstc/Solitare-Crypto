@@ -168,7 +168,7 @@ export default class Home extends Component {
     var username = "Please register";
     var emailGame = "email game not set";
     var timeWitdrwal = "Loading...";
-    var imagenLink = "assets/img/default-user-csg.png";
+    var imagenLink = "images/game-data.png";
 
     var register = await fetch(cons.API+"api/v1/user/exist/"+this.props.currentAccount);
     register = Boolean(await register.text());
@@ -559,7 +559,7 @@ export default class Home extends Component {
           <div className="row text-center">
             <div className="col-lg-6 col-md-6 ">
             <img
-                src="images/logo.png"
+                src="images/wallet.png"
                 className="meta-gray"
                 width="100"
                 height="100" 
@@ -692,10 +692,9 @@ this.update();
 
             <div className="col-lg-6 col-md-12  mt-2">
             <a href="https://bscscan.com/address/0x2846df5d668C1B4017562b7d2C1E471373912509#tokentxns"><img
-                src="images/logo.png"
+                src="images/exchange-bnb.png"
                 className="meta-gray"
                 width="100"
-                height="100" 
                 alt="markert info"/></a>
 
             <h3>EXCHANGE</h3>
@@ -816,10 +815,9 @@ this.update();
 
             <div className="col-lg-6 col-md-12  mt-2">
             <img
-                src="images/logo.png"
+                src="images/in-game.png"
                 className="meta-gray"
                 width="100"
-                height="100" 
                 alt="markert info"/>
 
             <h3>IN GAME</h3>

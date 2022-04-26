@@ -447,6 +447,21 @@ progress {
   display: inline-block;
   text-align: center;
 }
+.item-market{
+  position: absolute;
+  top: 78%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.item-banner{
+  position: absolute;
+  top: 78%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 3, 20, 0.938);
+  border-radius: 15px;
+  padding: 20px;
+}
 .item1{
   position: absolute;
   max-width: 200px;
@@ -506,6 +521,9 @@ progress {
   transform: translate(-50%, -50%);
   background-color: rgba(16, 24, 70, 0.616);
   border-radius: 15px;
+}
+.fondo-inicio{
+  background-image: url("../images/");
 }
 .img-fluid {
   max-width: 100%;

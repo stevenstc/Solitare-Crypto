@@ -194,21 +194,25 @@ export default class Market extends Component {
     return (
       <><header className="masthead text-center text-white">
       <div className="masthead-content">
-        <div className="container px-5">
-        <div className="row">
-            <div className="col-lg-12 col-md-12 p-4 text-center bg-secondary bg-gradient">
-              <h2>Refer link: </h2>
-              <div className="input-group mb-3">
-                <input type="text" className="form-control" id="textArea" onClick={()=>{this.copyToClipBoard()}} value={this.state.referLink} readOnly />
-                <div className="input-group-append">
-                  <button className="btn btn-outline-danger" type="button" onClick={()=>{this.copyToClipBoard()}}>Copy</button>
+        <div className="contenedor">
+          <img src="images/ref.png"></img>
+          <div className="container px-5 item-market">
+            <div className="row">
+              <div className="col-lg-12 col-md-12 p-4 text-center" >
+                <h3>Refer link: </h3>
+                <div className="input-group mb-3">
+                  <input type="text" className="form-control" id="textArea" onClick={()=>{this.copyToClipBoard()}} value={this.state.referLink} readOnly />
+                  <div className="input-group-append">
+                    <button className="btn btn-outline-danger" type="button" onClick={()=>{this.copyToClipBoard()}}>Copy</button>
+                  </div>
                 </div>
+                <h3 className=" pb-4">Available: {this.state.balance}</h3>
               </div>
-              <h2 className=" pb-4">BNB available:</h2>
-              <h3 className=" pb-4">{this.state.balance}</h3>
-            </div>
 
+            </div>
           </div>
+        </div>
+        <div className="container px-5">
           <div className="row">
             <div className="col-lg-12 col-md-12 p-4 text-center">
               <h2 className=" pb-4">Items</h2>
