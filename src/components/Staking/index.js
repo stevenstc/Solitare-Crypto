@@ -146,8 +146,19 @@ export default class HomeStaking extends Component {
       inventario = <h1>No cards to staking, please buy</h1>
     }
 
+    console.log(this.props.wallet);
+
+    var balance = await this.props.wallet.web3.eth.getBalance(this.props.wallet.contractStaking._address);
+
+    balance = new BigNumber(balance);
+    balance = balance.shiftedBy(-18);
+    balance = balance.decimalPlaces(2)
+    balance = balance.toString();
+    balance = balance.replace(".",",")
+
     this.setState({
-      inventario: inventario
+      inventario: inventario,
+      bnbContract: balance
     })
   }
 
@@ -161,7 +172,7 @@ export default class HomeStaking extends Component {
           width="100%"
           alt="banner solitaire crypto"
         />
-        <div className="item-banner"><h1>1000 BNB</h1></div>
+        <div className="item-banner"><h1>{this.state.bnbContract} BNB</h1></div>
       </div>
         <header className="masthead text-center text-white">
           <div className="masthead-content">
@@ -265,12 +276,12 @@ export default class HomeStaking extends Component {
                 <div className="col-md-12" >
                   <div  className="contenedor">
                     <img src="images/texto.png" className="img-fluid" alt="sponsor" />
-                    <div className="item1" ><img src="images/smc.png" className="img-fluid" align="left"></img>AUDITED SMART CONTRACT: TESTED AND VERIFIED BY HAZECRYPTO: FAIR,STABLE AND RELIABLE PROJECT YOU CAN TRUST TO</div>
-                    <div className="item2"><img src="images/dinero.png" className="img-fluid" align="left"></img>INCOME START FROM 8% PER DAY: FLEXIBLE ARCHITECTURE WILL BE PROFITABLE FOR ANY INVERSOR : JUST CHOOSE YOUR PLAN AND CLAIM THE PROFITS!</div>
-                    <div className="item3"><img src="images/ballena.png" className="img-fluid" align="left"></img>ANTI-WHALE FEATURES : THE BALANCE OF OUR SMART CONTRACT WILL BE MAINTAINED BY A SYSTEM OF A MAXIMUM WITHDRAWAL PER DAY FOR EACH USER</div>
-                    <div className="item4"><img src="images/exchange.png" className="img-fluid" align="left"></img>3-LEVEL REFERRAL PROGRAM : EARN WHEN PEOPLE INVITED BY YOU MAKE DEPOSITS. YOU ALSO BENEFIT FROM THEIR REFERRALS!</div>
-                    <div className="item5"><img src="images/support.png" className="img-fluid" align="left"></img>24/7 SUPPORT HELP : FEEL FREE TO ASK ANY QUESTION IN OUR GROUP ANY TIME, WE WILL BE GLAD TO HELP YOU!</div>
-                    <div className="item6"><img src="images/mando-control.png" className="img-fluid" align="left"></img>SMART CONTRACT GAMER : THIS UNION WILL BRING UNLIMITED REWARDS AND SUSTAINABILITY TO THE SMART CONTRACT</div>
+                    <div className="item1" ><img src="images/smc.png" className="img-fluid" align="left" alt=""></img>AUDITED SMART CONTRACT: TESTED AND VERIFIED BY HAZECRYPTO: FAIR,STABLE AND RELIABLE PROJECT YOU CAN TRUST TO</div>
+                    <div className="item2"><img src="images/dinero.png" className="img-fluid" align="left" alt=""></img>INCOME START FROM 8% PER DAY: FLEXIBLE ARCHITECTURE WILL BE PROFITABLE FOR ANY INVERSOR : JUST CHOOSE YOUR PLAN AND CLAIM THE PROFITS!</div>
+                    <div className="item3"><img src="images/ballena.png" className="img-fluid" align="left" alt=""></img>ANTI-WHALE FEATURES : THE BALANCE OF OUR SMART CONTRACT WILL BE MAINTAINED BY A SYSTEM OF A MAXIMUM WITHDRAWAL PER DAY FOR EACH USER</div>
+                    <div className="item4"><img src="images/exchange.png" className="img-fluid" align="left" alt=""></img>3-LEVEL REFERRAL PROGRAM : EARN WHEN PEOPLE INVITED BY YOU MAKE DEPOSITS. YOU ALSO BENEFIT FROM THEIR REFERRALS!</div>
+                    <div className="item5"><img src="images/support.png" className="img-fluid" align="left" alt=""></img>24/7 SUPPORT HELP : FEEL FREE TO ASK ANY QUESTION IN OUR GROUP ANY TIME, WE WILL BE GLAD TO HELP YOU!</div>
+                    <div className="item6"><img src="images/mando-control.png" className="img-fluid" align="left" alt=""></img>SMART CONTRACT GAMER : THIS UNION WILL BRING UNLIMITED REWARDS AND SUSTAINABILITY TO THE SMART CONTRACT</div>
 
 
                   </div>

@@ -195,7 +195,7 @@ export default class Market extends Component {
       <><header className="masthead text-center text-white">
       <div className="masthead-content">
         <div className="contenedor">
-          <img src="images/ref.png"></img>
+          <img src="images/ref.png" alt=""></img>
           <div className="container px-5 item-market">
             <div className="row">
               <div className="col-lg-12 col-md-12 p-4 text-center" >
