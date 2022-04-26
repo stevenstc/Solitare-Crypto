@@ -242,6 +242,10 @@ export default class HomeStaking extends Component {
                 
                 <div className="col-md-12">
                   <h2>Flexible + BONUS({this.state.bonus}%)</h2>
+                  <p>
+                    Condition #1: Time, it will be increased by 0.5% every 24 hours.<br></br>
+                    Condition #2: Balance, It will be increased by 1% for every 100BNB that enters the reward pool.
+                  </p>
                 </div>
 
                 <div className="col-md-12" >
@@ -257,6 +261,10 @@ export default class HomeStaking extends Component {
                 <div className="col-md-12">
                   <hr></hr>
                   <h2>Locked + BONUS({this.state.bonus}%)</h2>
+                  <p>
+                    Condition #1: Time, it will be increased by 0.5% every 24 hours.<br></br>
+                    Condition #2: Balance, It will be increased by 1% for every 100BNB that enters the reward pool.
+                  </p>
                 </div>
 
                 <div className="col-md-12" >

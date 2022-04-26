@@ -196,6 +196,7 @@ export default class Market extends Component {
       <div className="masthead-content">
         <div className="contenedor">
           <img src="images/ref.png" alt=""></img>
+          <div className="item-market2">Generate rewards in bnb without initial investment, inviting your friends</div>
           <div className="container px-5 item-market">
             <div className="row">
               <div className="col-lg-12 col-md-12 p-4 text-center" >
@@ -215,7 +216,7 @@ export default class Market extends Component {
         <div className="container px-5">
           <div className="row">
             <div className="col-lg-12 col-md-12 p-4 text-center">
-              <h2 className=" pb-4">Items</h2>
+              <h2 className=" pb-4">Cards</h2>
             </div>
 
             {this.state.itemsYoutube}

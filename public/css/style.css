@@ -453,6 +453,12 @@ progress {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.item-market2{
+  position: absolute;
+  top: 23%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 .item-banner{
   position: absolute;
   top: 78%;
