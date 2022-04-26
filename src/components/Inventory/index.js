@@ -20,7 +20,7 @@ export default class Home extends Component {
       pais: "country not selected",
       timeWitdrwal: "Loading...",
       botonwit: true,
-      imagenLink: "assets/img/default-user-csg.png"
+      imagenLink: "images/game-data.png"
     }
 
     this.balance = this.balance.bind(this);
@@ -433,7 +433,7 @@ export default class Home extends Component {
               datos.imagen = await prompt("Place a profile image link in jpg jpeg or png format, we recommend that it be 500 X 500 pixels","https://cryptosoccermarket.com/assets/img/default-user-csg.png");
             
             }else{
-              datos.imagen = "https://cryptosoccermarket.com/assets/img/default-user-csg.png";
+              datos.imagen = "images/game-data.png";
             }
 
 
@@ -691,7 +691,7 @@ this.update();
           
 
             <div className="col-lg-6 col-md-12  mt-2">
-            <a href="https://bscscan.com/address/0x2846df5d668C1B4017562b7d2C1E471373912509#tokentxns"><img
+            <a href={"https://bscscan.com/address/"+this.props.wallet.contractStaking._address+"#tokentxns"}><img
                 src="images/exchange-bnb.png"
                 className="meta-gray"
                 width="100"
