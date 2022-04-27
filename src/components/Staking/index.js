@@ -170,7 +170,10 @@ export default class HomeStaking extends Component {
           width="100%"
           alt="banner solitaire crypto"
         />
-        <div className="item-banner"><h1>{this.state.bnbContract} BNB</h1></div>
+        <div className="item-banner">
+          <h1>{this.state.bnbContract} BNB</h1>
+          Contract Balance
+        </div>
       </div>
         <header className="masthead text-center text-white">
           <div className="masthead-content">
