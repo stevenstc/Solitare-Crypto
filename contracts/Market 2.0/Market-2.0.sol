@@ -89,9 +89,9 @@ contract Admin is Context, Ownable{
 contract MarketV2 is Context, Admin{
   using SafeMath for uint256;
   
-  address payable public adminWallet = payable(0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d);
-  address payable public stakingContract = payable(0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d);
-  uint256 public ventaPublica = 1648503749;
+  address payable public adminWallet = payable(0x1C261DE3DA6873c225079c73d7bA1B111eb9a5b3);
+  address payable public stakingContract;
+  uint256 public ventaPublica = 1652029200;
   uint256 public MAX_BNB = 1 * 10**18;
   uint256 public TIME_CLAIM = 1 * 86400;
   uint256[] public niveles = [3, 2, 1];
@@ -299,12 +299,14 @@ contract MarketV2 is Context, Admin{
   }
   
   function UpdateDEVSWallet(address payable _adminWallet) public onlyOwner returns (bool){
+    admin[adminWallet] = false;
     adminWallet = _adminWallet;
     admin[_adminWallet] = true;
     return true;
   }
 
   function UpdateStakingContract(address payable _stakingContract) public onlyOwner returns (bool){
+    admin[stakingContract] = false;
     stakingContract = _stakingContract;
     admin[_stakingContract] = true;
     return true;

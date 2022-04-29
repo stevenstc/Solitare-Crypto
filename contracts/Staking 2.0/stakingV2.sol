@@ -114,8 +114,8 @@ contract Admin is Context, Ownable{
 contract StakingV2 is Context, Admin{
   using SafeMath for uint256;
 
-  Market_Interface MARKET_CONTRACT = Market_Interface(0xd9145CCE52D386f254917e481eB44e9943F39138);
-  TRC20_Interface OTRO_Contract = TRC20_Interface(0xD70e4ec3A81231b63BC2CD16D2Bd6Acc4614d505);
+  Market_Interface MARKET_CONTRACT = Market_Interface(0x1860D0262b201Cc405D50DD9F0442E3C4a137Da2);
+  TRC20_Interface OTRO_Contract = TRC20_Interface(0xF0fB4a5ACf1B1126A991ee189408b112028D7A63);
 
   struct Dep {
     uint256 deposito;
@@ -126,7 +126,7 @@ contract StakingV2 is Context, Admin{
 
   }
 
-  uint256 public inicio;
+  uint256 public inicio = 1652029200;
   uint256 public plazoRetiros = 1*86400;
 
   mapping (address => Dep[]) public flexible;
@@ -139,9 +139,7 @@ contract StakingV2 is Context, Admin{
   uint256[] public planRetorno = [1120, 1360, 1400, 1930, 2750, 2920];
   bool[] public planBloqueo = [false,false,false,true,true,true];
 
-  constructor() { 
-    inicio = block.timestamp;
-  }
+  constructor() { }
 
   function bonus() public view returns(uint256){
     uint256 bonoBalance = ((address(this).balance).div(100*10**18)).mul(10);
