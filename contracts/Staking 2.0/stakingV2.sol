@@ -3,65 +3,65 @@ pragma solidity >=0.8.0;
 
 library SafeMath {
 
-    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-        if (a == 0) {
-            return 0;
-        }
-
-        uint256 c = a * b;
-        require(c / a == b);
-
-        return c;
+  function mul(uint256 a, uint256 b) internal pure returns (uint256) {
+    if (a == 0) {
+        return 0;
     }
 
-    function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        require(b > 0);
-        uint256 c = a / b;
+    uint256 c = a * b;
+    require(c / a == b);
 
-        return c;
-    }
+    return c;
+  }
 
-    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-        require(b <= a);
-        uint256 c = a - b;
+  function div(uint256 a, uint256 b) internal pure returns (uint256) {
+    require(b > 0);
+    uint256 c = a / b;
 
-        return c;
-    }
+    return c;
+  }
 
-    function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        uint256 c = a + b;
-        require(c >= a);
+  function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+    require(b <= a);
+    uint256 c = a - b;
 
-        return c;
-    }
+    return c;
+  }
+
+  function add(uint256 a, uint256 b) internal pure returns (uint256) {
+    uint256 c = a + b;
+    require(c >= a);
+
+    return c;
+  }
 
 }
 
 interface TRC20_Interface {
 
-    function allowance(address _owner, address _spender) external view returns (uint256 remaining);
-    function transferFrom(address _from, address _to, uint256 _value) external returns (bool);
-    function transfer(address direccion, uint256 cantidad) external returns (bool);
-    function balanceOf(address who) external view returns (uint256);
-    function decimals() external view returns (uint256);
-    function totalSupply() external view returns (uint256);
+  function allowance(address _owner, address _spender) external view returns (uint256 remaining);
+  function transferFrom(address _from, address _to, uint256 _value) external returns (bool);
+  function transfer(address direccion, uint256 cantidad) external returns (bool);
+  function balanceOf(address who) external view returns (uint256);
+  function decimals() external view returns (uint256);
+  function totalSupply() external view returns (uint256);
 }
 
 interface Market_Interface {
 
-    function consultarCarta(address _owner, uint256 _index) external view returns (uint256);
-    function NoStakingCard(address _owner, uint256 _index) external returns (bool);
+  function consultarCarta(address _owner, uint256 _index) external view returns (uint256);
+  function NoStakingCard(address _owner, uint256 _index) external returns (bool);
 
 }
 
 abstract contract Context {
-    function _msgSender() internal view virtual returns (address) {
-        return msg.sender;
-    }
+  function _msgSender() internal view virtual returns (address) {
+    return msg.sender;
+  }
 
-    function _msgData() internal view virtual returns (bytes calldata) {
-        return msg.data;
-    }
+  function _msgData() internal view virtual returns (bytes calldata) {
+    return msg.data;
+  }
 }
 
 contract Ownable is Context {
@@ -113,8 +113,8 @@ contract Admin is Context, Ownable{
 
 contract StakingV2 is Context, Admin{
   using SafeMath for uint256;
-
-  Market_Interface MARKET_CONTRACT = Market_Interface(0x1860D0262b201Cc405D50DD9F0442E3C4a137Da2);
+  
+  Market_Interface MARKET_CONTRACT = Market_Interface(0x90Cf30B430F1af99964FEf8ca0786A088188E9C7);
   TRC20_Interface OTRO_Contract = TRC20_Interface(0xF0fB4a5ACf1B1126A991ee189408b112028D7A63);
 
   struct Dep {
@@ -126,7 +126,7 @@ contract StakingV2 is Context, Admin{
 
   }
 
-  uint256 public inicio = 1652029200;
+  uint256 public inicio = 1652630400;
   uint256 public plazoRetiros = 1*86400;
 
   mapping (address => Dep[]) public flexible;
@@ -272,13 +272,6 @@ contract StakingV2 is Context, Admin{
     inicio = _inicio;
     
     return true;
-  }
-
-  function ChangeMarketContract(address _market) public onlyOwner returns(bool){
-    MARKET_CONTRACT = Market_Interface(_market);
-    admin[_market] = true;
-    return true;
-
   }
 
   fallback() external payable {}
