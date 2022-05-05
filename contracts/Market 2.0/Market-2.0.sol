@@ -306,29 +306,11 @@ contract MarketV2 is Context, Admin{
   }
 
   function UpdateStakingContract(address payable _stakingContract) public onlyOwner returns (bool){
+    if(stakingContract != address(0)) revert();
     admin[stakingContract] = false;
     stakingContract = _stakingContract;
     admin[_stakingContract] = true;
     return true;
-
-  }
-
-  function ChangeTokenOTRO(address _tokenERC20) public onlyOwner returns (bool){
-    OTRO_Contract = TRC20_Interface(_tokenERC20);
-    return true;
-
-  }
-
-  function redimOTRO() public onlyOwner returns (uint256){
-    if ( OTRO_Contract.balanceOf(address(this)) <= 0)revert();
-    uint256 valor = OTRO_Contract.balanceOf(address(this));
-    OTRO_Contract.transfer(owner, valor);
-    return valor;
-  }
-
-  function redimBNB() public onlyOwner returns (bool){
-    if ( address(this).balance <= 0)revert();
-    return owner.send(address(this).balance);
 
   }
 

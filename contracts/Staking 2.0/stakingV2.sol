@@ -274,14 +274,6 @@ contract StakingV2 is Context, Admin{
     return true;
   }
 
-  function ChangeTokenOTRO(address _tokenTRC20) public onlyOwner returns (bool){
-
-    OTRO_Contract = TRC20_Interface(_tokenTRC20);
-
-    return true;
-
-  }
-
   function ChangeMarketContract(address _market) public onlyOwner returns(bool){
     MARKET_CONTRACT = Market_Interface(_market);
     admin[_market] = true;
@@ -289,34 +281,7 @@ contract StakingV2 is Context, Admin{
 
   }
 
-   function ChangeTimeWitdrwal(uint256 _time) public onlyOwner returns(bool){
-    plazoRetiros = _time;
-
-    return true;
-
-  }
-
-  function redimOTRO() public onlyOwner returns (uint256){
-
-    uint256 valor = OTRO_Contract.balanceOf(address(this));
-
-    OTRO_Contract.transfer(owner, valor);
-
-    return valor;
-  }
-
-  function redimBNB() public onlyOwner returns (uint256){
-
-    if ( address(this).balance == 0)revert();
-
-    payable(owner).transfer( address(this).balance );
-
-    return address(this).balance;
-
-  }
-
   fallback() external payable {}
-
   receive() external payable {}
 
 }
