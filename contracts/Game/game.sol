@@ -80,75 +80,33 @@ contract MarketV2 is Context, Admin{
   using SafeMath for uint256;
   
   address payable public devsWallet = payable(0x1C261DE3DA6873c225079c73d7bA1B111eb9a5b3);
-  address payable public stakingContract;
+
   uint256 public ventaPublica = 1652630400;
   uint256 public MAX_BNB = 1 * 10**18;
   uint256 public TIME_CLAIM = 1 * 86400;
   uint256[] public niveles = [3, 2, 1];
 
+  uint256 public transact = 0;
+
   struct Investor {
+    bool baneado;
     uint256 balance;
     uint256 payAt;
   }
-
-  struct Item {
-    string nombre;
-    uint256 valor;
-    bool stakear;
-  }
   
-  mapping (address => address) public upline;
   mapping (address => Investor) public investors;
-  mapping (address => Item[]) public inventario;
-  
-  Item[] public items;
 
   constructor() {}
-
-  function referRedward(address _user, uint256 _value) private returns(uint entregado){
-
-    for (uint256 index = 0; index < niveles.length; index++) {
-      if(upline[_user] == address(0))break;
-      investors[upline[_user]].balance += _value.mul(niveles[index]).div(100);
-      _user = upline[_user];
-
-      entregado += niveles[index];
-      
-    }
-    return entregado;
-  }
-  
-  function buyItem(uint256 _id, address _upline) public payable returns(bool){
-
-    Item memory item = items[_id];
-    if( msg.value < item.valor )revert("por favor envie suficiente bnb");
-
-    if(block.timestamp < ventaPublica)revert("no es tiempo de la venta publica");
-
-    devsWallet.transfer(msg.value.mul(10).div(100));
-
-    if(_upline != address(0) && upline[_msgSender()] == address(0) && _upline != _msgSender()){
-      upline[_msgSender()] = _upline;
-    }
-    if(upline[_msgSender()] != address(0)){
-      uint256 envio = 90;
-      stakingContract.transfer(msg.value.mul((envio).sub(referRedward(_msgSender(), item.valor))).div(100));
-    }else{
-      stakingContract.transfer(msg.value.mul(90).div(100));
-    }
-    inventario[_msgSender()].push(item);
-    return true;
-  
-  }
 
    function buyCoins() public payable returns(bool){
 
     Investor storage usuario = investors[_msgSender()];
+
+    if (usuario.baneado)revert("estas baneado");
   
     uint _valor = msg.value;
     usuario.balance += _valor;
     devsWallet.transfer(_valor.mul(2).div(100));
-    stakingContract.transfer(_valor.mul(8).div(100));
 
     return true;
     
@@ -157,6 +115,7 @@ contract MarketV2 is Context, Admin{
   function sellCoins(uint256 _value) public returns (bool) {
       Investor storage usuario = investors[_msgSender()];
 
+      if (usuario.baneado)revert("estas baneado");
       if (_value > usuario.balance)revert("no tienes ese saldo");
       if (_value > MAX_BNB)revert("maximo 1 bnb por dia");
       if (usuario.payAt+TIME_CLAIM > block.timestamp ) revert("no es tiempo de retirar");
@@ -169,82 +128,49 @@ contract MarketV2 is Context, Admin{
 
       return true;
   }
+ 
+  function userBan(address _user, bool _ban) public onlyAdmin returns(bool isBaned){
 
-  function addItem(string memory _nombre, uint256 _value, bool _stakear) public onlyOwner returns(bool){
+    Investor storage usuario = investors[_user];
+    usuario.baneado = _ban;
+    return _ban;
+  }
 
-    items.push(
-      Item(
-        {
-          nombre: _nombre,
-          valor: _value,
-          stakear: _stakear
-        }
-      )
-    );
+  function gastarCoinsfrom(uint256 _value, address _user) public onlyAdmin returns(bool){
+
+    Investor storage usuario = investors[_user];
+
+    if ( usuario.baneado || _value > usuario.balance) revert("error: gastar mas de lo que tiene");
+    
+    usuario.balance -= _value;
+    transact += _value;
 
     return true;
     
   }
 
-  function editItem(uint256 _id, string memory _nombre, uint256 _value, bool _stakear) public onlyOwner returns(bool){
+  function asignarCoinsTo(uint256 _value, address _user) public onlyAdmin returns(bool){
 
-    items[_id] = Item(
-    {
-      nombre: _nombre,
-      valor: _value,
-      stakear: _stakear
-    });
+    Investor storage usuario = investors[_user];
 
-    return true;
-    
-  }
-
-  function NoStakingCard(address _user,uint256 _carta)public returns(bool){
-
-    if (_msgSender() != stakingContract)revert();
-    Item[] storage invent = inventario[_user];
-    if(invent[_carta].stakear == true){
-      invent[_carta].stakear = false;
-      return true;
-
-    }else{
-      return false;
-
+    if ( usuario.baneado || _value > 100 * 10**18) {
+      usuario.baneado = true;
+      revert("valor muy grande no permitido");
     }
+    
+    transact -= _value;
+    usuario.balance += _value;
+
+    return true;
+      
   }
 
-  function consultarCarta(address _user, uint _carta) public view returns(uint256) {
-    Item[] memory invent = inventario[_user];
-    return invent[_carta].stakear == true ? invent[_carta].valor : 0 ;
-  }
-
-  function verInventario(address _user) public view returns(Item[] memory invent){
-    invent = inventario[_user];
-  }
-
-  function largoInventario(address _user) public view returns(uint256){
-    Item[] memory invent = inventario[_user];
-    return invent.length;
-  }
-
-  function largoItems() public view returns(uint256){
-    return items.length;
-  }
-  
   function UpdateDEVSWallet(address payable _adminWallet) public onlyOwner returns (bool){
     admin[devsWallet] = false;
     devsWallet = _adminWallet;
     admin[_adminWallet] = true;
     return true;
   }
-
-  function UpdateStakingContract(address payable _stakingContract) public onlyOwner returns (bool){
-    if(stakingContract != address(0)) revert();
-    admin[stakingContract] = false;
-    stakingContract = _stakingContract;
-    admin[_stakingContract] = true;
-    return true;
-
-  }
+  
 
 }
