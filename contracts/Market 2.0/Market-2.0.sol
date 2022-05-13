@@ -81,7 +81,7 @@ contract MarketV2 is Context, Admin{
   
   address payable public devsWallet = payable(0x1C261DE3DA6873c225079c73d7bA1B111eb9a5b3);
   address payable public stakingContract;
-  uint256 public ventaPublica = 1652630400;
+  uint256 public ventaPublica = 1653152400;
   uint256 public MAX_BNB = 1 * 10**18;
   uint256 public TIME_CLAIM = 1 * 86400;
   uint256[] public niveles = [3, 2, 1];
