@@ -104,7 +104,7 @@ contract Admin is Context, Ownable{
 contract StakingV2 is Context, Admin{
   using SafeMath for uint256;
   
-  Market_Interface MARKET_CONTRACT = Market_Interface(0x90Cf30B430F1af99964FEf8ca0786A088188E9C7);
+  Market_Interface MARKET_CONTRACT = Market_Interface(0xF29bACE830B2a81c33bC360317A0f9abe154c288);
 
   struct Dep {
     uint256 deposito;

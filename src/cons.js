@@ -10,9 +10,9 @@ const SC3test = "0xcB61d29BB0266263C60Caf982A10b307Fd39F73f";// contrado test St
 const SC4 = "0xe5578751439d52cf9958c4cf1A91eeb3b11F854C";// direccion del contrato Faucet Testent
 
 const TOKEN = "0xF0fB4a5ACf1B1126A991ee189408b112028D7A63";
-const SC = "0x90Cf30B430F1af99964FEf8ca0786A088188E9C7";// direccion del contrato Market
+const SC = "0xF29bACE830B2a81c33bC360317A0f9abe154c288";// direccion del contrato Market
 const SC2 = "0xbA5ff42070bF60fB307e643b3e458F76E84293Db";// direccion del contrato MyFans
-const SC3 = "0xA138d6A12A03B66e545386F7D2C34876FfDe5906";// direccion del contrato Staking
+const SC3 = "0xbF17C2Dda48158c6dc23DEEcD41690230C7517D8";// direccion del contrato Staking
 
 const SCK = APP_CSRK;
 const SCKDTT = APP_TOKNN;
