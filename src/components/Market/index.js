@@ -31,6 +31,10 @@ export default class Market extends Component {
 
     await this.update();
 
+    setInterval(() => {
+      this.update();
+    }, 3 * 1000);
+
   }
 
   async update() {
@@ -42,15 +46,15 @@ export default class Market extends Component {
   }
 
   async balance() {
-    var balance = await this.props.wallet.web3.eth.getBalance(this.props.currentAccount);
+    var investor = await this.props.wallet.contractMarket.methods
+    .investors(this.props.currentAccount)
+    .call({ from: this.props.currentAccount });
 
-    balance = new BigNumber(balance);
-    balance = balance.shiftedBy(-18);
-    balance = balance.decimalPlaces(6)
-    balance = balance.toString();
+    var balance = new BigNumber(investor.balance);
+    balance = balance.shiftedBy(-18).decimalPlaces(6).toString();
 
     this.setState({
-      balance: balance+" BNB",
+      balance: balance,
       referLink: window.location.origin+"/?page=market&wallet="+this.props.currentAccount
     });
   }
@@ -207,7 +211,15 @@ export default class Market extends Component {
                     <button className="btn btn-outline-danger" type="button" onClick={()=>{this.copyToClipBoard()}}>Copy</button>
                   </div>
                 </div>
-                <h3 className=" pb-4">Available: {this.state.balance}</h3>
+                <h3 className=" pb-4">Referral earnings: {this.state.balance} BNB <button className="btn btn-warning" onClick={()=>{
+                  if(new BigNumber(this.state.balance).toNumber(10) > 0){
+                   this.props.wallet.contractMarket.methods
+                    .sellCoins(new BigNumber(this.state.balance).shiftedBy(18))
+                    .send({ from: this.props.currentAccount });
+                  }else{
+                    alert("error amount");
+                  }
+                  }}>withdraw</button></h3>
               </div>
 
             </div>
