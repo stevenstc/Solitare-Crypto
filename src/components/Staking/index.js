@@ -302,7 +302,7 @@ export default class HomeStaking extends Component {
                   <img src="images/sponsor-1.png" alt="sponsor" />
                   <img src="images/sponsor-2.png" alt="sponsor" />
                   <img src="images/sponsor-3.png" alt="sponsor" />
-                  <img src="images/sponsor-4.png" alt="sponsor" />
+                  <a href="https://hazecrypto.net/audit/solitairecrypto"><img src="images/sponsor-4.png" alt="haze crypto" /></a>
                 <hr></hr>
                 </div>
               </div>
