@@ -47,7 +47,7 @@ class App extends Component {
         contractToken: null,
         contractMarket: null
       },
-      baneado: true
+      baneado: false
       
     };
 
