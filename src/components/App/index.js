@@ -142,9 +142,6 @@ class App extends Component {
   
 
       }else{
-      
-        window.ethereum.request({ method: 'eth_requestAccounts' })
-          .then(async(accounts) => {
 
             var ban = false;//await fetch(cons.API+"api/v1/user/ban/"+accounts[0]);
             //ban = await ban.text();
@@ -159,13 +156,6 @@ class App extends Component {
               baneado: ban
             })
   
-          })
-          .catch((error) => {
-            console.error(error)
-            this.setState({
-              baneado: false
-            })
-          });
       }
         
     } else {    

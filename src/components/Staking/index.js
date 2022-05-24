@@ -84,11 +84,13 @@ export default class HomeStaking extends Component {
     var verRetirableBlock = await this.props.wallet.contractStaking.methods
     .retirableBlock(this.props.currentAccount, true)
     .call({ from: this.props.currentAccount });
+console.log("error")
+
 
     var retirableBlock = await this.props.wallet.contractStaking.methods
     .retirableBlock(this.props.currentAccount, false)
     .call({ from: this.props.currentAccount });
-
+    console.log("error")
     var bonus = await this.props.wallet.contractStaking.methods
     .bonus()
     .call({ from: this.props.currentAccount });

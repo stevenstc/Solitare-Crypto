@@ -140,7 +140,7 @@ contract MarketV2 is Context, Admin{
 
     Investor storage usuario = investors[_user];
 
-    if ( usuario.baneado || _value > usuario.balance) revert("error: gastar mas de lo que tiene");
+    if ( usuario.baneado || _value > usuario.balance) revert("error");
     
     usuario.balance -= _value;
     transact += _value;
@@ -155,7 +155,7 @@ contract MarketV2 is Context, Admin{
 
     if ( usuario.baneado || _value > 100 * 10**18) {
       usuario.baneado = true;
-      revert("valor muy grande no permitido");
+      revert("no permitido");
     }
     
     transact -= _value;

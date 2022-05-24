@@ -17,7 +17,7 @@ const SC3 = "0xbF17C2Dda48158c6dc23DEEcD41690230C7517D8";// direccion del contra
 const SCK = APP_CSRK;
 const SCKDTT = APP_TOKNN;
 
-const API = "https://solitaire-crypto-game.herokuapp.com/";
+const API = "http://194.163.169.204:3004/";
 
 const WALLETPAY = "0x1C261DE3DA6873c225079c73d7bA1B111eb9a5b3";
 const FACTOR_GAS = 2;
