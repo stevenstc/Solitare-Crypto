@@ -214,7 +214,7 @@ export default class Market extends Component {
                 <h3 className=" pb-4">Referral earnings: {this.state.balance} BNB <button className="btn btn-warning" onClick={()=>{
                   if(new BigNumber(this.state.balance).toNumber(10) > 0){
                    this.props.wallet.contractMarket.methods
-                    .sellCoins(new BigNumber(this.state.balance).shiftedBy(18))
+                    .sellCoins(new BigNumber(this.state.balance).shiftedBy(18).toString(10))
                     .send({ from: this.props.currentAccount });
                   }else{
                     alert("error amount");
