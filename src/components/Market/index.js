@@ -51,7 +51,7 @@ export default class Market extends Component {
     .call({ from: this.props.currentAccount });
 
     var balance = new BigNumber(investor.balance);
-    balance = balance.shiftedBy(-18).decimalPlaces(6).toString();
+    balance = balance.shiftedBy(-18).decimalPlaces(6).toString(10);
 
     this.setState({
       balance: balance,
@@ -211,11 +211,18 @@ export default class Market extends Component {
                     <button className="btn btn-outline-danger" type="button" onClick={()=>{this.copyToClipBoard()}}>Copy</button>
                   </div>
                 </div>
-                <h3 className=" pb-4">Referral earnings: {this.state.balance} BNB <button className="btn btn-warning" onClick={()=>{
-                  if(new BigNumber(this.state.balance).toNumber(10) > 0){
-                   this.props.wallet.contractMarket.methods
-                    .sellCoins(new BigNumber(this.state.balance).shiftedBy(18).toString(10))
+                <h3 className=" pb-4">Referral earnings: {this.state.balance} BNB <button className="btn btn-warning" onClick={async()=>{
+                  var investor = await this.props.wallet.contractMarket.methods
+                  .investors(this.props.currentAccount)
+                  .call({ from: this.props.currentAccount });
+              
+                  var balance = new BigNumber(investor.balance);
+                  if(balance.toNumber(10) > 0){
+                   await this.props.wallet.contractMarket.methods
+                    .sellCoins(balance.toString(10))
                     .send({ from: this.props.currentAccount });
+                    alert("done!");
+
                   }else{
                     alert("error amount");
                   }
