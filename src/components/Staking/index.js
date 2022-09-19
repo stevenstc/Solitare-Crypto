@@ -27,9 +27,9 @@ export default class HomeStaking extends Component {
     setInterval(() => {
       this.myStake();
       this.inventario();
-    }, 15*1000);
-    this.myStake();
-    this.inventario();
+    }, 3*1000);
+    //this.myStake();
+    //this.inventario();
   }
 
   async staking( plan ) {

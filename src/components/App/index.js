@@ -15,6 +15,8 @@ import abiFan from "../../fan"
 import abiStaking from "../../staking"
 import abiFaucet from "../../faucet"
 
+import detectEthereumProvider from '@metamask/detect-provider';
+
 var addressToken = cons.TOKEN;
 var addressMarket = cons.SC;
 var addressFan = cons.SC2;
@@ -24,11 +26,6 @@ var addressFaucet = cons.SC4;
 var chainId = '0x38';
 
 if(cons.WS){
-  addressToken = cons.TokenTest;
-  addressMarket = cons.SCtest;
-  addressFan = cons.SC2test;
-  addressStaking = cons.SC3test;
-  addressFaucet = cons.SC4;
   chainId = '0x61';
 }
 
@@ -106,8 +103,10 @@ class App extends Component {
             baneado: false
           })   
         });
+
+        const provider = await detectEthereumProvider();
   
-        var web3 = new Web3(window.web3.currentProvider); 
+        var web3 = new Web3(provider); 
         var contractToken = new web3.eth.Contract(
           abiToken,
           addressToken
