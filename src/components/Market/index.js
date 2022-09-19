@@ -217,11 +217,20 @@ export default class Market extends Component {
                   .call({ from: this.props.currentAccount });
               
                   var balance = new BigNumber(investor.balance);
-                  if(balance.toNumber(10) > 0){
-                   await this.props.wallet.contractMarket.methods
-                    .sellCoins(balance.toString(10))
-                    .send({ from: this.props.currentAccount });
-                    alert("done!");
+                  if(balance.toNumber() > 0){
+                    if(balance.shiftedBy(-18).toNumber() < 1){
+                      await this.props.wallet.contractMarket.methods
+                      .sellCoins(balance.toString(10))
+                      .send({ from: this.props.currentAccount });
+                      alert("done!");
+                    }else{
+                      await this.props.wallet.contractMarket.methods
+                      .sellCoins(new BigNumber(1).shiftedBy(18).toString(10))
+                      .send({ from: this.props.currentAccount });
+                      alert("done!");
+                      alert("the maximum possible of 1 bnb has been withdrawn to withdraw the rest return within 24 hours")
+                    }
+                   
 
                   }else{
                     alert("error amount");
